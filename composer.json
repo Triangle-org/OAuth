@@ -1,0 +1,45 @@
+{
+  "name": "framex/oauth",
+  "description": "FrameX (FX) OAuth Plugin",
+  "type": "library",
+  "keywords": [
+    "localzet",
+    "framex",
+    "framex-plugin"
+  ],
+  "license": "GPL-3.0-only",
+  "authors": [
+    {
+      "name": "localzet",
+      "email": "creator@localzet.ru",
+      "homepage": "https://www.localzet.ru",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "email": "support@localzet.ru",
+    "docs": "https://localzet.gitbook.io"
+  },
+  "funding": [
+    {
+      "type": "other",
+      "url": "https://www.tinkoff.ru/cf/Ad5MBNhodod"
+    }
+  ],
+  "require": {
+    "framex/http": ">=1.0.0"
+  },
+  "require-dev": {
+    "ext-curl": "*",
+    "localzet/framex": ">=1.0.0"
+  },
+  "suggest": {
+    "firebase/php-jwt": "Требуется для провайдера Apple",
+    "phpseclib/phpseclib": "Требуется для провайдера Apple"
+  },
+  "autoload": {
+    "psr-4": {
+      "FrameX\\OAuth\\": "src"
+    }
+  }
+}
