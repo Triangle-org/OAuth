@@ -108,7 +108,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
         $this->storage = new Storage();
 
-        $this->logger = Log::channel();
+        $this->logger = Log::channel('plugin.oauth.default');
 
         $this->configure();
 
