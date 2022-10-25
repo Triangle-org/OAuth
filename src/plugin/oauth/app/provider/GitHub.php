@@ -21,7 +21,7 @@ use plugin\oauth\app\entity;
 use support\Collection;
 
 /**
- * Github OAuth2 provider adapter.
+ * GitHub OAuth2 provider adapter.
  */
 class GitHub extends OAuth2
 {

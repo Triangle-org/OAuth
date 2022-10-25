@@ -21,6 +21,5 @@ class DefaultCallback
     static function callback(Profile $user)
     {
         return view('profile/card', ['user' => $user]);
-        // return response((array)$user);
     }
 }
