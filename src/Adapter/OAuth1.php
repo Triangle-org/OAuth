@@ -26,6 +26,7 @@ namespace Triangle\OAuth\Adapter;
 
 use Exception;
 use support\Parser;
+use Triangle\Engine\Http\Response;
 use Triangle\OAuth\Base\OAuthConsumer;
 use Triangle\OAuth\Base\OAuthRequest;
 use Triangle\OAuth\Base\OAuthSignatureMethodHMACSHA1;
@@ -224,7 +225,7 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function authenticate(): ?bool
+    public function authenticate(): bool|Response|null
     {
         $this->logger->info(sprintf('%s::authenticate()', get_class($this)));
 

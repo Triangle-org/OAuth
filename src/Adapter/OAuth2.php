@@ -27,6 +27,7 @@ namespace Triangle\OAuth\Adapter;
 use Exception;
 use support\Collection;
 use support\Parser;
+use Triangle\Engine\Http\Response;
 use Triangle\OAuth\Exception\AuthorizationDeniedException;
 use Triangle\OAuth\Exception\HttpClientFailureException;
 use Triangle\OAuth\Exception\HttpRequestFailedException;
@@ -319,7 +320,7 @@ class OAuth2 extends AbstractAdapter implements AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function authenticate(): ?bool
+    public function authenticate(): bool|Response|null
     {
         $this->logger->info(sprintf('%s::authenticate()', get_class($this)));
 

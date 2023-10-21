@@ -25,6 +25,7 @@
 namespace Triangle\OAuth\Adapter;
 
 use support\Collection;
+use Triangle\Engine\Http\Response;
 use Triangle\OAuth\Base\LightOpenID;
 use Triangle\OAuth\Exception\AuthorizationDeniedException;
 use Triangle\OAuth\Exception\InvalidOpenidIdentifierException;
@@ -98,7 +99,7 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function authenticate(): ?bool
+    public function authenticate(): bool|Response|null
     {
         $this->logger->info(sprintf('%s::authenticate()', get_class($this)));
 

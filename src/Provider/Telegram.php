@@ -25,6 +25,7 @@
 namespace Triangle\OAuth\Provider;
 
 use support\Collection;
+use Triangle\Engine\Http\Response;
 use Triangle\OAuth\Adapter\AbstractAdapter;
 use Triangle\OAuth\Adapter\AdapterInterface;
 use Triangle\OAuth\Exception\InvalidApplicationCredentialsException;
@@ -106,7 +107,7 @@ class Telegram extends AbstractAdapter implements AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function authenticate(): ?bool
+    public function authenticate(): bool|Response|null
     {
         $this->logger->info(sprintf('%s::authenticate()', get_class($this)));
         if (!request()->input('hash', false)) {

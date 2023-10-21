@@ -24,6 +24,7 @@
 
 namespace Triangle\OAuth\Adapter;
 
+use Triangle\Engine\Http\Response;
 use Triangle\OAuth\Model\Activity;
 use Triangle\OAuth\Model\Contact;
 use Triangle\OAuth\Model\Profile;
@@ -36,9 +37,9 @@ interface AdapterInterface
     /**
      * Initiate the appropriate protocol and process/automate the authentication or authorization flow.
      *
-     * @return bool|null
+     * @return bool|Response|null
      */
-    public function authenticate(): ?bool;
+    public function authenticate(): bool|Response|null;
 
     /**
      * Returns TRUE if the user is connected
