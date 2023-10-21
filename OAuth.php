@@ -1,9 +1,32 @@
 <?php
 
+/**
+ * @package     Triangle OAuth Plugin
+ * @link        https://github.com/Triangle-org/OAuth
+ *
+ * @author      Ivan Zorin <creator@localzet.com>
+ * @copyright   Copyright (c) 2018-2023 Localzet Group
+ * @license     GNU Affero General Public License, version 3
+ *
+ *              This program is free software: you can redistribute it and/or modify
+ *              it under the terms of the GNU Affero General Public License as
+ *              published by the Free Software Foundation, either version 3 of the
+ *              License, or (at your option) any later version.
+ *
+ *              This program is distributed in the hope that it will be useful,
+ *              but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *              MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *              GNU Affero General Public License for more details.
+ *
+ *              You should have received a copy of the GNU Affero General Public License
+ *              along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Triangle;
 
 use FilesystemIterator;
 use InvalidArgumentException;
+use Monolog\Logger;
 use SplFileInfo;
 use Triangle\OAuth\Adapter\AdapterInterface;
 use UnexpectedValueException;
@@ -21,6 +44,8 @@ class OAuth
         }
 
         $this->config = $config + [
+                'debug_mode' => Logger::DEBUG,
+                'debug_file' => '',
                 'curl_options' => null,
                 'providers' => []
             ];
@@ -47,17 +72,17 @@ class OAuth
     public function getAdapter($name)
     {
         $config = self::getProviderConfig($name);
-        $adapter = $config['adapter'] ?? sprintf('plugin\\oauth\\app\\provider\\%s', $name);
+        $adapter = $config['adapter'] ?? sprintf('Triangle\\OAuth\\Provider\\%s', $name);
 
         if (!class_exists($adapter)) {
             $adapter = null;
-            $fs = new FilesystemIterator(__DIR__ . '/Provider/');
+            $fs = new FilesystemIterator(__DIR__ . '/src/Provider/');
             /** @var SplFileInfo $file */
             foreach ($fs as $file) {
                 if (!$file->isDir()) {
                     $provider = strtok($file->getFilename(), '.');
                     if (mb_strtolower($name) === mb_strtolower($provider)) {
-                        $adapter = sprintf('plugin\\oauth\\app\\provider\\%s', $provider);
+                        $adapter = sprintf('Triangle\\OAuth\\Provider\\%s', $provider);
                         break;
                     }
                 }
@@ -95,8 +120,14 @@ class OAuth
         }
 
         $config = $providersConfig[$name];
+        $config += [
+            'debug_mode' => $this->config['debug_mode'],
+            'debug_file' => $this->config['debug_file'],
+        ];
 
-        $config['callback'] = request()->host(true) . '/callback';
+        if (!isset($config['callback']) && isset($this->config['callback'])) {
+            $config['callback'] = $this->config['callback'];
+        }
 
         return $config;
     }
@@ -112,7 +143,7 @@ class OAuth
      */
     public function isConnectedWith($name)
     {
-        return self::getAdapter($name)->isConnected();
+        return $this->getAdapter($name)->isConnected();
     }
 
     /**
@@ -125,7 +156,7 @@ class OAuth
         $providers = [];
 
         foreach ($this->config['providers'] as $name => $config) {
-            if ($config['enabled'] === true) {
+            if ($config['enabled']) {
                 $providers[] = $name;
             }
         }
@@ -144,8 +175,8 @@ class OAuth
     {
         $providers = [];
 
-        foreach (self::getProviders() as $name) {
-            if (self::isConnectedWith($name)) {
+        foreach ($this->getProviders() as $name) {
+            if ($this->isConnectedWith($name)) {
                 $providers[] = $name;
             }
         }
@@ -164,8 +195,8 @@ class OAuth
     {
         $adapters = [];
 
-        foreach (self::getProviders() as $name) {
-            $adapter = self::getAdapter($name);
+        foreach ($this->getProviders() as $name) {
+            $adapter = $this->getAdapter($name);
 
             if ($adapter->isConnected()) {
                 $adapters[$name] = $adapter;
@@ -180,8 +211,8 @@ class OAuth
      */
     public function disconnectAllAdapters()
     {
-        foreach (self::getProviders() as $name) {
-            $adapter = self::getAdapter($name);
+        foreach ($this->getProviders() as $name) {
+            $adapter = $this->getAdapter($name);
 
             if ($adapter->isConnected()) {
                 $adapter->disconnect();
