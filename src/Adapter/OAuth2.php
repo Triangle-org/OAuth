@@ -280,7 +280,7 @@ class OAuth2 extends AbstractAdapter implements AdapterInterface
             $this->setAccessToken($this->config->get('tokens'));
         }
 
-        $this->setCallback($this->config->get('callback_uri'));
+        $this->setCallback($this->config->get('callback'));
         $this->setApiEndpoints($this->config->get('endpoints'));
     }
 

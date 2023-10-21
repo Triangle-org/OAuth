@@ -87,7 +87,7 @@ class Telegram extends AbstractAdapter implements AdapterInterface
     {
         $this->botId = $this->config->filter('keys')->get('id');
         $this->botSecret = $this->config->filter('keys')->get('secret');
-        $this->callbackUrl = $this->config->get('callback_uri');
+        $this->callbackUrl = $this->config->get('callback');
 
         if (!$this->botId || !$this->botSecret) {
             throw new InvalidApplicationCredentialsException(

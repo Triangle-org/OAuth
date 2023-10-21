@@ -75,7 +75,7 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
             throw new InvalidOpenidIdentifierException('OpenID adapter requires an openid_identifier.', 4);
         }
 
-        $this->setCallback($this->config->get('callback_uri'));
+        $this->setCallback($this->config->get('callback'));
         $this->setApiEndpoints($this->config->get('endpoints'));
     }
 
