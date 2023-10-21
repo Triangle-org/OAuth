@@ -27,19 +27,22 @@
     }
   ],
   "require": {
-    "framex/http": ">=1.0.0"
+    "php": "^8.2",
+    "ext-curl": "*"
   },
   "require-dev": {
-    "ext-curl": "*",
-    "localzet/framex": ">=1.0.0"
+    "triangle/engine": "^4.1"
   },
   "suggest": {
+    "ext-libxml": "Требуется для провайдера Steam",
+    "ext-simplexml": "Требуется для провайдера Steam",
     "firebase/php-jwt": "Требуется для провайдера Apple",
     "phpseclib/phpseclib": "Требуется для провайдера Apple"
   },
   "autoload": {
     "psr-4": {
-      "FrameX\\OAuth\\": "src"
+      "Triangle\\": "",
+      "Triangle\\OAuth\\": "src"
     }
   }
 }
