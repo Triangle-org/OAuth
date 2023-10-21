@@ -14,6 +14,7 @@
 
 namespace Triangle\OAuth\Base;
 
+use plugin\oauth\lib\ErrorException;
 use plugin\oauth\lib\Identity;
 
 /**
@@ -75,7 +76,7 @@ class LightOpenID
      * @param      $host
      * @param null $proxy
      *
-     * @throws \plugin\oauth\lib\ErrorException
+     * @throws ErrorException
      */
     public function __construct($host, $proxy = null)
     {
@@ -88,7 +89,7 @@ class LightOpenID
         $this->data = ($_SERVER['REQUEST_METHOD'] === 'POST') ? $_POST : $_GET;
 
         if (!function_exists('curl_init') && !in_array('https', stream_get_wrappers())) {
-            throw new \plugin\oauth\lib\ErrorException('You must have either https wrappers or curl enabled.');
+            throw new ErrorException('You must have either https wrappers or curl enabled.');
         }
     }
 
@@ -162,7 +163,7 @@ class LightOpenID
     /**
      * @param $proxy
      *
-     * @throws \plugin\oauth\lib\ErrorException
+     * @throws ErrorException
      */
     public function set_proxy($proxy)
     {
@@ -181,7 +182,7 @@ class LightOpenID
                     }
 
                     if ($proxy['port'] <= 0) {
-                        throw new \plugin\oauth\lib\ErrorException('The specified proxy port number is invalid.');
+                        throw new ErrorException('The specified proxy port number is invalid.');
                     }
                 }
 
@@ -255,7 +256,7 @@ class LightOpenID
      * @param        $update_claimed_id
      *
      * @return array|bool|string
-     * @throws \plugin\oauth\lib\ErrorException
+     * @throws ErrorException
      */
     protected function request_curl($url, $method = 'GET', $params = array(), $update_claimed_id = false)
     {
@@ -351,7 +352,7 @@ class LightOpenID
         }
 
         if (curl_errno($curl)) {
-            throw new \plugin\oauth\lib\ErrorException(curl_error($curl), curl_errno($curl));
+            throw new ErrorException(curl_error($curl), curl_errno($curl));
         }
 
         return $response;
@@ -400,12 +401,12 @@ class LightOpenID
      * @param        $update_claimed_id
      *
      * @return array|false|string
-     * @throws \plugin\oauth\lib\ErrorException
+     * @throws ErrorException
      */
     protected function request_streams($url, $method = 'GET', $params = array(), $update_claimed_id = false)
     {
         if (!$this->hostExists($url)) {
-            throw new \plugin\oauth\lib\ErrorException("Could not connect to $url.", 404);
+            throw new ErrorException("Could not connect to $url.", 404);
         }
 
         if (empty($this->cnmatch)) {
@@ -546,7 +547,7 @@ class LightOpenID
      * @param bool $update_claimed_id
      *
      * @return array|bool|false|string
-     * @throws \plugin\oauth\lib\ErrorException
+     * @throws ErrorException
      */
     protected function request($url, $method = 'GET', $params = array(), $update_claimed_id = false)
     {
@@ -649,12 +650,12 @@ class LightOpenID
      * Performs Yadis and HTML discovery. Normally not used.
      * @param $url Identity URL.
      * @return String OP Endpoint (i.e. OpenID provider address).
-     * @throws \plugin\oauth\lib\ErrorException
+     * @throws ErrorException
      */
     public function discover($url)
     {
         if (!$url) {
-            throw new \plugin\oauth\lib\ErrorException('No identity supplied.');
+            throw new ErrorException('No identity supplied.');
         }
         # Use xri.net proxy to resolve i-name identities
         if (!preg_match('#^https?:#', $url)) {
@@ -796,9 +797,9 @@ class LightOpenID
                 return $server;
             }
 
-            throw new \plugin\oauth\lib\ErrorException("No OpenID Server found at $url", 404);
+            throw new ErrorException("No OpenID Server found at $url", 404);
         }
-        throw new \plugin\oauth\lib\ErrorException('Endless redirection!', 500);
+        throw new ErrorException('Endless redirection!', 500);
     }
 
     /**
@@ -1007,7 +1008,7 @@ class LightOpenID
      * Returns authentication url. Usually, you want to redirect your user to it.
      * @param bool $immediate
      * @return String The authentication url.
-     * @throws \plugin\oauth\lib\ErrorException
+     * @throws ErrorException
      */
     public function authUrl($immediate = false)
     {
@@ -1027,7 +1028,7 @@ class LightOpenID
     /**
      * Performs OpenID verification with the OP.
      * @return Bool Whether the verification was successful.
-     * @throws \plugin\oauth\lib\ErrorException
+     * @throws ErrorException
      */
     public function validate()
     {
