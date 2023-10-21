@@ -165,7 +165,7 @@ class Google extends OAuth2
         $parameters = ['max-results' => 500] + $parameters;
 
         // Google Gmail and Android contacts
-        if (str_contains($this->scope, '/m8/feeds/') || str_contains($this->scope, '/auth/contacts.readonly')) {
+        if (false !== strpos($this->scope, '/m8/feeds/') || false !== strpos($this->scope, '/auth/contacts.readonly')) {
             return $this->getGmailContacts($parameters);
         }
 
