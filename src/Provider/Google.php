@@ -79,12 +79,14 @@ class Google extends OAuth2
     /**
      * {@inheritdoc}
      */
-    protected $authorizeUrl = 'https://accounts.google.com/o/oauth2/auth';
+//  protected $authorizeUrl = 'https://accounts.google.com/o/oauth2/auth';  // Было
+    protected $authorizeUrl = 'https://accounts.google.com/o/oauth2/v2/auth';   // Стало
 
     /**
      * {@inheritdoc}
      */
-    protected $accessTokenUrl = 'https://accounts.google.com/o/oauth2/token';
+//  protected $accessTokenUrl = 'https://accounts.google.com/o/oauth2/token';   // Было
+    protected $accessTokenUrl = 'https://oauth2.googleapis.com/token';  // Стало
 
     /**
      * {@inheritdoc}
