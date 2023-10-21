@@ -1,31 +1,25 @@
 {
-  "name": "framex/oauth",
-  "description": "FrameX (FX) OAuth Plugin",
+  "name": "triangle/oauth",
+  "description": "Triangle Plugin",
   "type": "library",
   "keywords": [
     "localzet",
-    "framex",
-    "framex-plugin"
+    "Triangle",
+    "Triangle-plugin"
   ],
-  "license": "GPL-3.0-only",
+  "license": "AGPL-3.0-or-later",
   "authors": [
     {
       "name": "localzet",
-      "email": "creator@localzet.ru",
-      "homepage": "https://www.localzet.ru",
+      "email": "creator@localzet.com",
+      "homepage": "https://github.com/localzet",
       "role": "Developer"
     }
   ],
   "support": {
-    "email": "support@localzet.ru",
-    "docs": "https://localzet.gitbook.io"
+    "email": "support@localzet.com",
+    "source": "https://github.com/Triangle-org/OAuth"
   },
-  "funding": [
-    {
-      "type": "other",
-      "url": "https://www.tinkoff.ru/cf/Ad5MBNhodod"
-    }
-  ],
   "require": {
     "php": "^8.2",
     "ext-curl": "*"
