@@ -230,9 +230,7 @@ class Twitter extends OAuth1
             $params['media_ids'] = $media->media_id;
         }
 
-        $response = $this->apiRequest('statuses/update.json', 'POST', $params);
-
-        return $response;
+        return $this->apiRequest('statuses/update.json', 'POST', $params);
     }
 
     /**

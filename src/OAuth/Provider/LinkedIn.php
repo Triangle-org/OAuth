@@ -212,9 +212,7 @@ class LinkedIn extends OAuth2
             'X-Restli-Protocol-Version' => '2.0.0',
         ];
 
-        $response = $this->apiRequest("ugcPosts", 'POST', $status, $headers);
-
-        return $response;
+        return $this->apiRequest("ugcPosts", 'POST', $status, $headers);
     }
 
     /**

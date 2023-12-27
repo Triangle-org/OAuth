@@ -109,8 +109,6 @@ class Tumblr extends OAuth1
             ? ['type' => 'text', 'body' => $status]
             : $status;
 
-        $response = $this->apiRequest('blog/' . $this->getStoredData('primary_blog') . '/post', 'POST', $status);
-
-        return $response;
+        return $this->apiRequest('blog/' . $this->getStoredData('primary_blog') . '/post', 'POST', $status);
     }
 }

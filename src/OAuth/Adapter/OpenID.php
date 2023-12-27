@@ -234,9 +234,7 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
 
         $userProfile = $this->fetchUserGender($userProfile, $data->get('person/gender'));
 
-        $userProfile = $this->fetchUserDisplayName($userProfile, $data);
-
-        return $userProfile;
+        return $this->fetchUserDisplayName($userProfile, $data);
     }
 
     /**

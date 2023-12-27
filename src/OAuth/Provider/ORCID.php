@@ -91,9 +91,7 @@ class ORCID extends OAuth2
         $profile = $this->getName($profile, $data);
         $profile = $this->getEmail($profile, $data);
         $profile = $this->getLanguage($profile, $data);
-        $profile = $this->getAddress($profile, $data);
-
-        return $profile;
+        return $this->getAddress($profile, $data);
     }
 
     /**

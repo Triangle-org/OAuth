@@ -758,8 +758,6 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
 
         $this->validateApiResponse('Signed API request to ' . $url . ' has returned an error');
 
-        $response = parse($response);
-
-        return $response;
+        return parse($response);
     }
 }

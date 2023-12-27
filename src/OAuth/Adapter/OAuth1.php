@@ -376,14 +376,12 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
             $this->requestTokenParameters['oauth_callback'] = $this->callback;
         }
 
-        $response = $this->oauthRequest(
+        return $this->oauthRequest(
             $this->requestTokenUrl,
             $this->requestTokenMethod,
             $this->requestTokenParameters,
             $this->requestTokenHeaders
         );
-
-        return $response;
     }
 
     /**
@@ -475,14 +473,12 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
             $this->tokenExchangeParameters['oauth_verifier'] = $oauth_verifier;
         }
 
-        $response = $this->oauthRequest(
+        return $this->oauthRequest(
             $this->accessTokenUrl,
             $this->tokenExchangeMethod,
             $this->tokenExchangeParameters,
             $this->tokenExchangeHeaders
         );
-
-        return $response;
     }
 
     /**
@@ -578,9 +574,7 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
 
         $response = $this->oauthRequest($url, $method, $parameters, $headers, $multipart);
 
-        $response = parse($response);
-
-        return $response;
+        return parse($response);
     }
 
     /**

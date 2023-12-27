@@ -332,8 +332,7 @@ class OAuthRequest
      */
     public function build_signature($signature_method, $consumer, $token)
     {
-        $signature = $signature_method->build_signature($this, $consumer, $token);
-        return $signature;
+        return $signature_method->build_signature($this, $consumer, $token);
     }
 
     /**

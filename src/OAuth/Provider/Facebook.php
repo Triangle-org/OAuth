@@ -230,9 +230,7 @@ class Facebook extends OAuth2
 
         $userProfile = $this->fetchUserRegion($userProfile);
 
-        $userProfile = $this->fetchBirthday($userProfile, $data->get('birthday'));
-
-        return $userProfile;
+        return $this->fetchBirthday($userProfile, $data->get('birthday'));
     }
 
     /**
@@ -373,9 +371,7 @@ class Facebook extends OAuth2
                 'appsecret_proof' => hash_hmac('sha256', $page->access_token, $this->clientSecret),
             ];
 
-        $response = $this->apiRequest("{$pageId}/feed", 'POST', $parameters, $headers);
-
-        return $response;
+        return $this->apiRequest("{$pageId}/feed", 'POST', $parameters, $headers);
     }
 
     /**

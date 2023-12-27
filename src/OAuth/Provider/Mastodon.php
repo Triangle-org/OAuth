@@ -135,14 +135,12 @@ class Mastodon extends OAuth2
             'Content-Type' => 'application/json',
         ];
 
-        $response = $this->apiRequest(
+        return $this->apiRequest(
             'statuses',
             'POST',
             $params,
             $headers,
             false
         );
-
-        return $response;
     }
 }
