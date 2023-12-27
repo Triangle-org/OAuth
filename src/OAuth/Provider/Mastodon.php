@@ -139,8 +139,7 @@ class Mastodon extends OAuth2
             'statuses',
             'POST',
             $params,
-            $headers,
-            false
+            $headers
         );
     }
 }
