@@ -211,7 +211,7 @@ class LightOpenID
      */
     public function hostExists($url)
     {
-        if (strpos($url, '/') === false) {
+        if (!str_contains($url, '/')) {
             $server = $url;
         } else {
             $server = @parse_url($url, PHP_URL_HOST);
@@ -391,7 +391,7 @@ class LightOpenID
                 # We ignore redirections with relative paths.
                 # If any known provider uses them, file a bug report.
                 if ($name == 'location' && $update_claimed_id) {
-                    if (strpos($headers[$name], 'http') === 0) {
+                    if (str_starts_with($headers[$name], 'http')) {
                         $this->identity = $this->claimed_id = $headers[$name];
                     } elseif ($headers[$name][0] == '/') {
                         $parsed_url = parse_url($this->claimed_id);
@@ -832,7 +832,7 @@ class LightOpenID
         }
 
         foreach ($allowed_types as $type) {
-            if (strpos($content_type, $type) !== false) {
+            if (str_contains($content_type, $type)) {
                 return true;
             }
         }

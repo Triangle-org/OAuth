@@ -180,11 +180,11 @@ class Facebook extends OAuth2
             'birthday',
         ];
 
-        if (strpos($this->scope, 'user_link') !== false) {
+        if (str_contains($this->scope, 'user_link')) {
             $fields[] = 'link';
         }
 
-        if (strpos($this->scope, 'user_gender') !== false) {
+        if (str_contains($this->scope, 'user_gender')) {
             $fields[] = 'gender';
         }
 

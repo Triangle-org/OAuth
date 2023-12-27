@@ -88,7 +88,7 @@ class GitHub extends OAuth2
 
         $userProfile->displayName = $userProfile->displayName ?: $data->get('login');
 
-        if (empty($userProfile->email) && strpos($this->scope, 'user:email') !== false) {
+        if (empty($userProfile->email) && str_contains($this->scope, 'user:email')) {
             try {
                 // user email is not mandatory so keep it quite.
                 $userProfile = $this->requestUserEmail($userProfile);

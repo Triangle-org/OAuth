@@ -92,7 +92,7 @@ class OAuthRequest
 
             // We have a Authorization-header with OAuth data. Parse the header
             // and add those overriding any duplicates from GET or POST
-            if (isset($request_headers['Authorization']) && substr($request_headers['Authorization'], 0, 6) == 'OAuth ') {
+            if (isset($request_headers['Authorization']) && str_starts_with($request_headers['Authorization'], 'OAuth ')) {
                 $header_parameters = OAuthUtil::split_header($request_headers['Authorization']);
                 $parameters = array_merge($parameters, $header_parameters);
             }
@@ -287,7 +287,7 @@ class OAuthRequest
         }
 
         foreach ($this->parameters as $k => $v) {
-            if (substr($k, 0, 5) != "oauth") {
+            if (!str_starts_with($k, "oauth")) {
                 continue;
             }
             if (is_array($v)) {

@@ -183,7 +183,7 @@ class LinkedIn extends OAuth2
      */
     public function setUserStatus($status, $userID = null)
     {
-        if (strpos($this->scope, 'w_member_social') === false) {
+        if (!str_contains($this->scope, 'w_member_social')) {
             throw new Exception('Set user status requires w_member_social permission!');
         }
 

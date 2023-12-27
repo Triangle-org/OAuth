@@ -90,7 +90,7 @@ class BitBucket extends OAuth2
 
         $userProfile->displayName = $userProfile->displayName ?: $data->get('username');
 
-        if (empty($userProfile->email) && strpos($this->scope, 'email') !== false) {
+        if (empty($userProfile->email) && str_contains($this->scope, 'email')) {
             try {
                 // user email is not mandatory so keep it quiet
                 $userProfile = $this->requestUserEmail($userProfile);
