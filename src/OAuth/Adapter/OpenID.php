@@ -250,12 +250,10 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
         $userProfile->displayName = $data->get('namePerson');
 
         $userProfile->displayName = $userProfile->displayName
-            ? $userProfile->displayName
-            : $data->get('namePerson/friendly');
+            ?: $data->get('namePerson/friendly');
 
         $userProfile->displayName = $userProfile->displayName
-            ? $userProfile->displayName
-            : trim($userProfile->firstName . ' ' . $userProfile->lastName);
+            ?: trim($userProfile->firstName . ' ' . $userProfile->lastName);
 
         return $userProfile;
     }

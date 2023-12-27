@@ -123,9 +123,7 @@ class Vkontakte extends OAuth2
         }
 
         // If we are using offline scope, $expired will be false.
-        return $this->getStoredData('expires_in')
-            ? $this->getStoredData('expires_at') <= $time
-            : false;
+        return $this->getStoredData('expires_in') && $this->getStoredData('expires_at') <= $time;
     }
 
     /**
