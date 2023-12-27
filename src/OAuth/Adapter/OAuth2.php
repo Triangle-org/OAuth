@@ -357,7 +357,7 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
      */
     public function isConnected()
     {
-        if ((bool)$this->getStoredData('access_token')) {
+        if ($this->getStoredData('access_token')) {
             return (!$this->hasAccessTokenExpired() || $this->isRefreshTokenAvailable());
         }
         return false;
