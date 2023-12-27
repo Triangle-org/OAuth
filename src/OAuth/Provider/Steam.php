@@ -162,7 +162,7 @@ class Steam extends OpenID
         $userProfile['description'] = (string)$data->get('summary');
         $userProfile['region'] = (string)$data->get('location');
         $userProfile['profileURL'] = (string)$data->get('customURL')
-            ? 'http://steamcommunity.com/id/' . (string)$data->get('customURL')
+            ? 'http://steamcommunity.com/id/' . $data->get('customURL')
             : 'http://steamcommunity.com/profiles/' . $steam64;
 
         return $userProfile;
