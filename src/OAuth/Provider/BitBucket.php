@@ -115,10 +115,10 @@ class BitBucket extends OAuth2
         $response = $this->apiRequest('user/emails');
 
         foreach ($response->values as $idx => $item) {
-            if (!empty($item->is_primary) && $item->is_primary) {
+            if ($item->is_primary) {
                 $userProfile->email = $item->email;
 
-                if (!empty($item->is_confirmed) && $item->is_confirmed) {
+                if ($item->is_confirmed) {
                     $userProfile->emailVerified = $userProfile->email;
                 }
 
