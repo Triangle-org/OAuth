@@ -172,7 +172,7 @@ class OAuth
     {
         $name = strtolower($name);
 
-        $providersConfig = array_change_key_case($this->config['providers'], CASE_LOWER);
+        $providersConfig = array_change_key_case($this->config['providers']);
 
         if (!isset($providersConfig[$name])) {
             throw new InvalidArgumentException('Неизвестный провайдер (' . $name . ')');

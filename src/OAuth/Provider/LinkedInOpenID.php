@@ -82,7 +82,7 @@ class LinkedInOpenID extends OAuth2
     public function getUserProfile()
     {
 
-        $response = $this->apiRequest('/userinfo', 'GET', []);
+        $response = $this->apiRequest('/userinfo');
         $data = new Collection($response);
 
         if (!$data->exists('sub')) {

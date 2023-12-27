@@ -700,7 +700,7 @@ class LightOpenID
 
                 if (isset($headers['content-type']) && $this->is_allowed_type($headers['content-type'])) {
                     # Found an XRDS document, now let's find the server, and optionally delegate.
-                    $content = $this->request($url, 'GET');
+                    $content = $this->request($url);
 
                     preg_match_all('#<Service.*?>(.*?)</Service>#s', $content, $m);
                     foreach ($m[1] as $content) {
@@ -782,7 +782,7 @@ class LightOpenID
             }
 
             if (!$content) {
-                $content = $this->request($url, 'GET');
+                $content = $this->request($url);
             }
 
             # At this point, the YADIS Discovery has failed, so we'll switch

@@ -70,7 +70,7 @@ class Mastodon extends OAuth2
      */
     public function getUserProfile()
     {
-        $response = $this->apiRequest('accounts/verify_credentials', 'GET', []);
+        $response = $this->apiRequest('accounts/verify_credentials');
 
         $data = new Collection($response);
 
