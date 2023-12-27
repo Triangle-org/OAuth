@@ -1,41 +1,87 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
- * @package     Triangle OAuth Plugin
- * @link        https://github.com/Triangle-org/OAuth
+ * @package     Localzet OAuth
+ * @link        https://github.com/localzet/OAuth
  *
  * @author      Ivan Zorin <creator@localzet.com>
  * @copyright   Copyright (c) 2018-2023 Localzet Group
- * @license     GNU Affero General Public License, version 3
+ * @license     https://www.gnu.org/licenses/agpl-3.0 GNU Affero General Public License v3.0
  *
  *              This program is free software: you can redistribute it and/or modify
- *              it under the terms of the GNU Affero General Public License as
- *              published by the Free Software Foundation, either version 3 of the
- *              License, or (at your option) any later version.
+ *              it under the terms of the GNU Affero General Public License as published
+ *              by the Free Software Foundation, either version 3 of the License, or
+ *              (at your option) any later version.
  *
  *              This program is distributed in the hope that it will be useful,
  *              but WITHOUT ANY WARRANTY; without even the implied warranty of
- *              MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *              MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *              GNU Affero General Public License for more details.
  *
  *              You should have received a copy of the GNU Affero General Public License
- *              along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *              along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ *              For any questions, please contact <creator@localzet.com>
  */
 
 namespace Triangle;
 
 use FilesystemIterator;
-use InvalidArgumentException;
+use localzet\HTTP\Client;
 use Monolog\Logger;
 use SplFileInfo;
+use support\Log;
 use Triangle\OAuth\Adapter\AdapterInterface;
-use UnexpectedValueException;
+use Triangle\OAuth\Exception\InvalidArgumentException;
+use Triangle\OAuth\Exception\UnexpectedValueException;
+use Triangle\OAuth\Storage\StorageInterface;
 
+/**
+ * localzet\OAuth - Localzet Identification System
+ *
+ */
 class OAuth
 {
+    /**
+     * OAuth config.
+     *
+     * @var array
+     */
     protected $config;
 
-    public function __construct($config)
+    /**
+     * Storage.
+     *
+     * @var StorageInterface|null
+     */
+    protected ?StorageInterface $storage;
+
+    /**
+     * HttpClient.
+     *
+     * @var Client|null
+     */
+    protected ?Client $httpClient;
+
+    /**
+     * Logger.
+     *
+     * @var Logger|null
+     */
+    protected ?Logger $logger;
+
+    /**
+     * @param array|string $config Массив с конфигурацией или путем к файлу PHP, который вернет массив
+     * @param StorageInterface|null $storage
+     * @param Logger|null $logger
+     *
+     * @throws InvalidArgumentException
+     */
+    public function __construct(
+        array|string     $config,
+        StorageInterface $storage = null,
+        Logger           $logger = null
+    )
     {
         if (is_string($config) && file_exists($config)) {
             $config = include $config;
@@ -49,9 +95,25 @@ class OAuth
                 'curl_options' => null,
                 'providers' => []
             ];
+        $this->storage = $storage;
+        $this->logger = $logger ?? Log::channel();
+        $this->httpClient = new Client();
     }
 
-    public function authenticate($name)
+    /**
+     * Instantiate the given provider and authentication or authorization protocol.
+     *
+     * If not authenticated yet, the user will be redirected to the provider's site for
+     * authentication/authorization, otherwise it will simply return an instance of
+     * provider's adapter.
+     *
+     * @param string $name adapter's name (case insensitive)
+     *
+     * @return AdapterInterface
+     * @throws InvalidArgumentException
+     * @throws UnexpectedValueException
+     */
+    public function authenticate(string $name): AdapterInterface
     {
         $adapter = $this->getAdapter($name);
 
@@ -69,20 +131,21 @@ class OAuth
      * @throws InvalidArgumentException
      * @throws UnexpectedValueException
      */
-    public function getAdapter($name)
+    public function getAdapter(string $name): AdapterInterface
     {
-        $config = self::getProviderConfig($name);
-        $adapter = $config['adapter'] ?? sprintf('Triangle\\OAuth\\Provider\\%s', $name);
+        $config = $this->getProviderConfig($name);
+
+        $adapter = $config['adapter'] ?? sprintf('localzet\\OAuth\\Provider\\%s', $name);
 
         if (!class_exists($adapter)) {
             $adapter = null;
-            $fs = new FilesystemIterator(__DIR__ . '/src/Provider/');
+            $fs = new FilesystemIterator(__DIR__ . '/Provider/');
             /** @var SplFileInfo $file */
             foreach ($fs as $file) {
                 if (!$file->isDir()) {
                     $provider = strtok($file->getFilename(), '.');
                     if (mb_strtolower($name) === mb_strtolower($provider)) {
-                        $adapter = sprintf('Triangle\\OAuth\\Provider\\%s', $provider);
+                        $adapter = sprintf('localzet\\OAuth\\Provider\\%s', $provider);
                         break;
                     }
                 }
@@ -92,7 +155,7 @@ class OAuth
             }
         }
 
-        return new $adapter($config);
+        return new $adapter($config, $this->httpClient, $this->storage, $this->logger);
     }
 
     /**
@@ -112,11 +175,11 @@ class OAuth
         $providersConfig = array_change_key_case($this->config['providers'], CASE_LOWER);
 
         if (!isset($providersConfig[$name])) {
-            throw new InvalidArgumentException('Неизвестный провайдер');
+            throw new InvalidArgumentException('Неизвестный провайдер (' . $name . ')');
         }
 
         if (!$providersConfig[$name]['enabled']) {
-            throw new UnexpectedValueException('Провайдер отключён');
+            throw new UnexpectedValueException('Отключенный провайдер');
         }
 
         $config = $providersConfig[$name];
@@ -147,7 +210,7 @@ class OAuth
     }
 
     /**
-     * Список названий активных провайдеров
+     * Returns a list of enabled adapters names
      *
      * @return array
      */
