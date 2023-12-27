@@ -165,6 +165,11 @@ class Instagram extends OAuth2
 
     /**
      * {@inheritdoc}
+     * @return Profile
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
+     * @throws InvalidAccessTokenException
+     * @throws UnexpectedApiResponseException
      */
     public function getUserProfile()
     {

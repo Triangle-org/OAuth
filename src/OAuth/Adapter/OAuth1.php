@@ -33,6 +33,7 @@ use Triangle\OAuth\Exception\HttpClientFailureException;
 use Triangle\OAuth\Exception\HttpRequestFailedException;
 use Triangle\OAuth\Exception\InvalidAccessTokenException;
 use Triangle\OAuth\Exception\InvalidApplicationCredentialsException;
+use Triangle\OAuth\Exception\InvalidArgumentException;
 use Triangle\OAuth\Exception\InvalidOauthTokenException;
 use Triangle\OAuth\HttpClient;
 use Triangle\OAuth\Thirdparty\OAuth\OAuthConsumer;
@@ -165,6 +166,8 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     * @throws InvalidArgumentException
+     * @throws InvalidApplicationCredentialsException
      */
     protected function configure()
     {
@@ -269,6 +272,9 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
      * 1. Obtaining an Unauthorized Request Token
      * 2. Build Authorization URL for Authorization Request and redirect the user-agent to the
      *    Authorization Server.
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
+     * @throws InvalidOauthTokenException
      */
     protected function authenticateBegin()
     {

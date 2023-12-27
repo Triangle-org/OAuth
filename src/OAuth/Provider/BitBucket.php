@@ -29,6 +29,9 @@ namespace Triangle\OAuth\Provider;
 use Exception;
 use Support\Collection;
 use Triangle\OAuth\Adapter\OAuth2;
+use Triangle\OAuth\Exception\HttpClientFailureException;
+use Triangle\OAuth\Exception\HttpRequestFailedException;
+use Triangle\OAuth\Exception\InvalidAccessTokenException;
 use Triangle\OAuth\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Model\Profile;
 
@@ -68,6 +71,11 @@ class BitBucket extends OAuth2
 
     /**
      * {@inheritdoc}
+     * @return Profile
+     * @throws UnexpectedApiResponseException
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
+     * @throws InvalidAccessTokenException
      */
     public function getUserProfile()
     {

@@ -33,6 +33,7 @@ use Triangle\OAuth\Exception\HttpClientFailureException;
 use Triangle\OAuth\Exception\HttpRequestFailedException;
 use Triangle\OAuth\Exception\InvalidAccessTokenException;
 use Triangle\OAuth\Exception\InvalidApplicationCredentialsException;
+use Triangle\OAuth\Exception\InvalidArgumentException;
 use Triangle\OAuth\Exception\InvalidAuthorizationCodeException;
 use Triangle\OAuth\Exception\InvalidAuthorizationStateException;
 use Triangle\OAuth\HttpClient;
@@ -264,6 +265,8 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     * @throws InvalidArgumentException
+     * @throws InvalidApplicationCredentialsException
      */
     protected function configure()
     {

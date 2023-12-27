@@ -32,6 +32,7 @@ use Triangle\OAuth\Exception\HttpClientFailureException;
 use Triangle\OAuth\Exception\HttpRequestFailedException;
 use Triangle\OAuth\Exception\InvalidAccessTokenException;
 use Triangle\OAuth\Exception\InvalidArgumentException;
+use Triangle\OAuth\Exception\NotImplementedException;
 use Triangle\OAuth\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Model\Activity;
 use Triangle\OAuth\Model\Contact;
@@ -164,6 +165,11 @@ class Facebook extends OAuth2
 
     /**
      * {@inheritdoc}
+     * @return Profile
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
+     * @throws InvalidAccessTokenException
+     * @throws UnexpectedApiResponseException
      */
     public function getUserProfile()
     {
@@ -279,6 +285,11 @@ class Facebook extends OAuth2
      * you can use the Taggable Friends API.
      *
      * https://developers.facebook.com/docs/apps/faq#unable_full_friend_list
+     * @return array
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
+     * @throws InvalidAccessTokenException
+     * @throws UnexpectedApiResponseException
      */
     public function getUserContacts()
     {
@@ -339,6 +350,14 @@ class Facebook extends OAuth2
 
     /**
      * {@inheritdoc}
+     * @param $status
+     * @param $pageId
+     * @return mixed
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
+     * @throws InvalidAccessTokenException
+     * @throws InvalidArgumentException
+     * @throws NotImplementedException
      */
     public function setPageStatus($status, $pageId)
     {
@@ -393,6 +412,12 @@ class Facebook extends OAuth2
 
     /**
      * {@inheritdoc}
+     * @param string $stream
+     * @return array
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
+     * @throws InvalidAccessTokenException
+     * @throws UnexpectedApiResponseException
      */
     public function getUserActivity($stream = 'me')
     {

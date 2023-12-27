@@ -85,6 +85,7 @@ class Telegram extends AbstractAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     * @throws InvalidApplicationCredentialsException
      */
     protected function configure()
     {
@@ -108,6 +109,7 @@ class Telegram extends AbstractAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     * @throws InvalidAuthorizationCodeException
      */
     public function authenticate()
     {
@@ -132,6 +134,7 @@ class Telegram extends AbstractAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     * @throws UnexpectedApiResponseException
      */
     public function getUserProfile()
     {
@@ -160,6 +163,8 @@ class Telegram extends AbstractAdapter implements AdapterInterface
     /**
      * See: https://telegram.im/widget-login.php
      * See: https://gist.github.com/anonymous/6516521b1fb3b464534fbc30ea3573c2
+     * @throws InvalidAuthorizationCodeException
+     * @throws InvalidAuthorizationCodeException
      */
     protected function authenticateCheckError()
     {

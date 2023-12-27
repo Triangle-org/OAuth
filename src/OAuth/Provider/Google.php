@@ -29,6 +29,9 @@ namespace Triangle\OAuth\Provider;
 use Exception;
 use Support\Collection;
 use Triangle\OAuth\Adapter\OAuth2;
+use Triangle\OAuth\Exception\HttpClientFailureException;
+use Triangle\OAuth\Exception\HttpRequestFailedException;
+use Triangle\OAuth\Exception\InvalidAccessTokenException;
 use Triangle\OAuth\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Model\Contact;
 use Triangle\OAuth\Model\Profile;
@@ -116,6 +119,11 @@ class Google extends OAuth2
      * {@inheritdoc}
      *
      * See: https://developers.google.com/identity/protocols/OpenIDConnect#obtainuserinfo
+     * @return Profile
+     * @throws UnexpectedApiResponseException
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
+     * @throws InvalidAccessTokenException
      */
     public function getUserProfile()
     {
@@ -150,6 +158,7 @@ class Google extends OAuth2
 
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
     public function getUserContacts($parameters = [])
     {

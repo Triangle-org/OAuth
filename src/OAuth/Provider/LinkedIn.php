@@ -79,6 +79,8 @@ class LinkedIn extends OAuth2
 
     /**
      * {@inheritdoc}
+     * @throws Exception
+     * @throws UnexpectedApiResponseException
      */
     public function getUserProfile()
     {

@@ -28,6 +28,8 @@ namespace Triangle\OAuth\Adapter;
 
 use Support\Collection;
 use Triangle\OAuth\Exception\AuthorizationDeniedException;
+use Triangle\OAuth\Exception\ErrorException;
+use Triangle\OAuth\Exception\InvalidArgumentException;
 use Triangle\OAuth\Exception\InvalidOpenidIdentifierException;
 use Triangle\OAuth\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\HttpClient;
@@ -68,6 +70,8 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     * @throws InvalidArgumentException
+     * @throws InvalidOpenidIdentifierException
      */
     protected function configure()
     {
@@ -85,6 +89,7 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     * @throws ErrorException
      */
     protected function initialize()
     {
@@ -285,6 +290,7 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
 
     /**
      * OpenID only provide the user profile one. This method will attempt to retrieve the profile from storage.
+     * @throws UnexpectedApiResponseException
      */
     public function getUserProfile()
     {

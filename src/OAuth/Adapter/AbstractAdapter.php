@@ -149,6 +149,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     * @throws NotImplementedException
      */
     public function apiRequest($url, $method = 'GET', $parameters = [], $headers = [], $multipart = false)
     {
@@ -165,6 +166,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     * @throws NotImplementedException
      */
     public function getUserProfile()
     {
@@ -173,6 +175,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     * @throws NotImplementedException
      */
     public function getUserContacts()
     {
@@ -181,6 +184,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     * @throws NotImplementedException
      */
     public function getUserPages()
     {
@@ -189,6 +193,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     * @throws NotImplementedException
      */
     public function getUserActivity($stream)
     {
@@ -197,6 +202,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     * @throws NotImplementedException
      */
     public function setUserStatus($status)
     {
@@ -205,6 +211,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * {@inheritdoc}
+     * @throws NotImplementedException
      */
     public function setPageStatus($status, $pageId)
     {

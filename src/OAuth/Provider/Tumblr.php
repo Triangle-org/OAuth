@@ -28,6 +28,8 @@ namespace Triangle\OAuth\Provider;
 
 use Support\Collection;
 use Triangle\OAuth\Adapter\OAuth1;
+use Triangle\OAuth\Exception\HttpClientFailureException;
+use Triangle\OAuth\Exception\HttpRequestFailedException;
 use Triangle\OAuth\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Model\Profile;
 
@@ -63,6 +65,10 @@ class Tumblr extends OAuth1
 
     /**
      * {@inheritdoc}
+     * @return Profile
+     * @throws UnexpectedApiResponseException
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
      */
     public function getUserProfile()
     {

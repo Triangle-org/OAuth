@@ -28,6 +28,9 @@ namespace Triangle\OAuth\Provider;
 
 use Support\Collection;
 use Triangle\OAuth\Adapter\OAuth2;
+use Triangle\OAuth\Exception\HttpClientFailureException;
+use Triangle\OAuth\Exception\HttpRequestFailedException;
+use Triangle\OAuth\Exception\InvalidAccessTokenException;
 use Triangle\OAuth\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Model\Profile;
 
@@ -86,6 +89,11 @@ class Paypal extends OAuth2
      *
      * See: https://developer.paypal.com/docs/api/identity/v1/
      * See: https://developer.paypal.com/docs/connect-with-paypal/integrate/
+     * @return Profile
+     * @throws UnexpectedApiResponseException
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
+     * @throws InvalidAccessTokenException
      */
     public function getUserProfile()
     {

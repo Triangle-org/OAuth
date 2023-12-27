@@ -28,6 +28,9 @@ namespace Triangle\OAuth\Provider;
 
 use Support\Collection;
 use Triangle\OAuth\Adapter\OAuth2;
+use Triangle\OAuth\Exception\HttpClientFailureException;
+use Triangle\OAuth\Exception\HttpRequestFailedException;
+use Triangle\OAuth\Exception\InvalidAccessTokenException;
 use Triangle\OAuth\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Model\Profile;
 
@@ -105,6 +108,12 @@ class QQ extends OAuth2
 
     /**
      * {@inheritdoc}
+     * @param $response
+     * @return Collection
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
+     * @throws InvalidAccessTokenException
+     * @throws UnexpectedApiResponseException
      */
     protected function validateAccessTokenExchange($response)
     {
@@ -129,6 +138,11 @@ class QQ extends OAuth2
 
     /**
      * {@inheritdoc}
+     * @return Profile
+     * @throws UnexpectedApiResponseException
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
+     * @throws InvalidAccessTokenException
      */
     public function getUserProfile()
     {

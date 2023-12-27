@@ -29,6 +29,8 @@ namespace Triangle\OAuth\Provider;
 use Exception;
 use Support\Collection;
 use Triangle\OAuth\Adapter\OAuth1;
+use Triangle\OAuth\Exception\HttpClientFailureException;
+use Triangle\OAuth\Exception\HttpRequestFailedException;
 use Triangle\OAuth\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Model\Activity;
 use Triangle\OAuth\Model\Contact;
@@ -101,6 +103,10 @@ class Twitter extends OAuth1
 
     /**
      * {@inheritdoc}
+     * @return Profile
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
+     * @throws UnexpectedApiResponseException
      */
     public function getUserProfile()
     {
@@ -145,6 +151,11 @@ class Twitter extends OAuth1
 
     /**
      * {@inheritdoc}
+     * @param array $parameters
+     * @return array
+     * @throws UnexpectedApiResponseException
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
      */
     public function getUserContacts($parameters = [])
     {

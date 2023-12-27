@@ -207,9 +207,9 @@ class LightOpenID
      * Checks if the server specified in the url exists.
      *
      * @param $url string url to check
-     * @return true, if the server exists; false otherwise
+     * @return bool true, if the server exists; false otherwise
      */
-    public function hostExists($url)
+    public function hostExists($url): bool
     {
         if (!str_contains($url, '/')) {
             $server = $url;

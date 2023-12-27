@@ -28,6 +28,9 @@ namespace Triangle\OAuth\Provider;
 
 use Support\Collection;
 use Triangle\OAuth\Adapter\OAuth2;
+use Triangle\OAuth\Exception\HttpClientFailureException;
+use Triangle\OAuth\Exception\HttpRequestFailedException;
+use Triangle\OAuth\Exception\InvalidAccessTokenException;
 use Triangle\OAuth\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Model\Contact;
 use Triangle\OAuth\Model\Profile;
@@ -64,6 +67,11 @@ class WindowsLive extends OAuth2
 
     /**
      * {@inheritdoc}
+     * @return Profile
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
+     * @throws InvalidAccessTokenException
+     * @throws UnexpectedApiResponseException
      */
     public function getUserProfile()
     {
@@ -95,6 +103,11 @@ class WindowsLive extends OAuth2
 
     /**
      * {@inheritdoc}
+     * @return array
+     * @throws UnexpectedApiResponseException
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
+     * @throws InvalidAccessTokenException
      */
     public function getUserContacts()
     {

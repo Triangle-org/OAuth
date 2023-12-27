@@ -29,6 +29,9 @@ namespace Triangle\OAuth\Provider;
 use CurlFile;
 use Support\Collection;
 use Triangle\OAuth\Adapter\OAuth2;
+use Triangle\OAuth\Exception\HttpClientFailureException;
+use Triangle\OAuth\Exception\HttpRequestFailedException;
+use Triangle\OAuth\Exception\InvalidAccessTokenException;
 use Triangle\OAuth\Exception\InvalidApplicationCredentialsException;
 use Triangle\OAuth\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Model\Profile;
@@ -47,6 +50,8 @@ class Mastodon extends OAuth2
 
     /**
      * {@inheritdoc}
+     * @throws InvalidApplicationCredentialsException
+     * @throws InvalidApplicationCredentialsException
      */
     protected function configure()
     {
@@ -67,6 +72,11 @@ class Mastodon extends OAuth2
 
     /**
      * {@inheritdoc}
+     * @return Profile
+     * @throws HttpClientFailureException
+     * @throws HttpRequestFailedException
+     * @throws InvalidAccessTokenException
+     * @throws UnexpectedApiResponseException
      */
     public function getUserProfile()
     {
@@ -93,6 +103,11 @@ class Mastodon extends OAuth2
         return $userProfile;
     }
 
+    /**
+     * @throws HttpRequestFailedException
+     * @throws HttpClientFailureException
+     * @throws InvalidAccessTokenException
+     */
     public function setUserStatus($status)
     {
         // Prepare request parameters.
