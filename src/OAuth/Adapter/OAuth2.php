@@ -495,7 +495,7 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
         $this->AuthorizeUrlParameters = !empty($parameters)
             ? $parameters
             : array_replace(
-                (array)$this->AuthorizeUrlParameters,
+                $this->AuthorizeUrlParameters,
                 (array)$this->config->get('authorize_url_parameters')
             );
 
