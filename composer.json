@@ -1,23 +1,38 @@
 {
   "name": "triangle/oauth",
-  "description": "Triangle Plugin",
+  "description": "Triangle OAuth Plugin - это мощный плагин для OAuth-аутентификации, поддерживающий множество популярных провайдеров, таких как Google, Facebook, Twitter и Apple.",
   "type": "library",
   "keywords": [
+    "oauth",
+    "openid",
+    "authentication",
+    "authorization",
+    "social",
+    "api",
+    "google",
+    "facebook",
+    "twitter",
+    "apple",
     "localzet",
-    "Triangle",
-    "Triangle-plugin"
+    "library",
+    "OAuth2",
+    "identity",
+    "security",
+    "login"
   ],
+  "homepage": "https://docs.localzet.com/triangle/oauth",
   "license": "AGPL-3.0-or-later",
   "authors": [
     {
-      "name": "localzet",
+      "name": "Ivan Zorin",
       "email": "creator@localzet.com",
-      "homepage": "https://github.com/localzet",
+      "homepage": "https://www.localzet.com",
       "role": "Developer"
     }
   ],
   "support": {
     "email": "support@localzet.com",
+    "issues": "https://github.com/Triangle-org/OAuth/issues",
     "source": "https://github.com/Triangle-org/OAuth"
   },
   "require": {
