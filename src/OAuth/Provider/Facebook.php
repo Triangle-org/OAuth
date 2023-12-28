@@ -26,14 +26,14 @@
 
 namespace Triangle\OAuth\Provider;
 
+use InvalidArgumentException;
 use Support\Collection;
+use Triangle\Engine\Exception\HttpClientFailureException;
+use Triangle\Engine\Exception\HttpRequestFailedException;
+use Triangle\Engine\Exception\InvalidAccessTokenException;
+use Triangle\Engine\Exception\NotImplementedException;
+use Triangle\Engine\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Adapter\OAuth2;
-use Triangle\OAuth\Exception\HttpClientFailureException;
-use Triangle\OAuth\Exception\HttpRequestFailedException;
-use Triangle\OAuth\Exception\InvalidAccessTokenException;
-use Triangle\OAuth\Exception\InvalidArgumentException;
-use Triangle\OAuth\Exception\NotImplementedException;
-use Triangle\OAuth\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Model\Activity;
 use Triangle\OAuth\Model\Contact;
 use Triangle\OAuth\Model\Profile;
@@ -50,13 +50,13 @@ use Triangle\OAuth\Model\Profile;
  * Example:
  *
  *   $config = [
- *       'callback' => localzet\OAuth\HttpClient\Util::getCurrentUrl(),
+ *       'callback' => 'https:' . request()?->url(),
  *       'keys' => ['id' => '', 'secret' => ''],
  *       'scope' => 'email, user_status, user_posts',
  *       'exchange_by_expiry_days' => 45, // null for no token exchange
  *   ];
  *
- *   $adapter = new localzet\OAuth\Provider\Facebook($config);
+ *   $adapter = new Triangle\OAuth\Provider\Facebook($config);
  *
  *   try {
  *       $adapter->authenticate();

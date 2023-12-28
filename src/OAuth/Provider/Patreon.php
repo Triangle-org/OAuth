@@ -27,11 +27,11 @@
 namespace Triangle\OAuth\Provider;
 
 use Support\Collection;
+use Triangle\Engine\Exception\HttpClientFailureException;
+use Triangle\Engine\Exception\HttpRequestFailedException;
+use Triangle\Engine\Exception\InvalidAccessTokenException;
+use Triangle\Engine\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Adapter\OAuth2;
-use Triangle\OAuth\Exception\HttpClientFailureException;
-use Triangle\OAuth\Exception\HttpRequestFailedException;
-use Triangle\OAuth\Exception\InvalidAccessTokenException;
-use Triangle\OAuth\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Model\Contact;
 use Triangle\OAuth\Model\Profile;
 

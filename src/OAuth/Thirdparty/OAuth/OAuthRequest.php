@@ -29,7 +29,7 @@ namespace Triangle\OAuth\Thirdparty\OAuth;
 /**
  * Class OAuthRequest
  *
- * @package localzet\OAuth\Thirdparty\OAuth
+ * @package Triangle\OAuth\Thirdparty\OAuth
  */
 class OAuthRequest
 {

@@ -27,11 +27,11 @@
 namespace Triangle\OAuth\Provider;
 
 use Support\Collection;
+use Triangle\Engine\Exception\HttpClientFailureException;
+use Triangle\Engine\Exception\HttpRequestFailedException;
+use Triangle\Engine\Exception\InvalidAccessTokenException;
+use Triangle\Engine\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Adapter\OAuth2;
-use Triangle\OAuth\Exception\HttpClientFailureException;
-use Triangle\OAuth\Exception\HttpRequestFailedException;
-use Triangle\OAuth\Exception\InvalidAccessTokenException;
-use Triangle\OAuth\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Model\Contact;
 use Triangle\OAuth\Model\Profile;
 
@@ -47,13 +47,13 @@ use Triangle\OAuth\Model\Profile;
  * Example:
  *
  *   $config = [
- *       'callback' => localzet\OAuth\HttpClient\Util::getCurrentUrl(),
+ *       'callback' => 'https:' . request()?->url(),
  *       'keys' => ['id' => '', 'secret' => ''],
  *       'tenant' => 'user',
  *         // ^ May be 'common', 'organizations' or 'consumers' or a specific tenant ID or a domain
  *   ];
  *
- *   $adapter = new localzet\OAuth\Provider\MicrosoftGraph($config);
+ *   $adapter = new Triangle\OAuth\Provider\MicrosoftGraph($config);
  *
  *   try {
  *       $adapter->authenticate();

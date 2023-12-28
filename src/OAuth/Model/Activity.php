@@ -27,7 +27,7 @@
 namespace Triangle\OAuth\Model;
 
 use stdClass;
-use Triangle\OAuth\Exception\UnexpectedValueException;
+use UnexpectedValueException;
 
 /**
  * Triangle\OAuth\Model\Activity

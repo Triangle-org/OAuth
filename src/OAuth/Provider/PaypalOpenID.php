@@ -27,7 +27,6 @@
 namespace Triangle\OAuth\Provider;
 
 use Triangle\OAuth\Adapter\OpenID;
-use Triangle\OAuth\HttpClient;
 
 /**
  * PayPal OpenID provider adapter.
@@ -85,6 +84,6 @@ class PaypalOpenID extends OpenID
             'company/title',
         ];
 
-        HttpClient\Util::redirect($this->openIdClient->authUrl());
+        return redirect($this->openIdClient->authUrl());
     }
 }

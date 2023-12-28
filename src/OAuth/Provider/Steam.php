@@ -29,8 +29,8 @@ namespace Triangle\OAuth\Provider;
 use Exception;
 use SimpleXMLElement;
 use Support\Collection;
+use Triangle\Engine\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Adapter\OpenID;
-use Triangle\OAuth\Exception\UnexpectedApiResponseException;
 
 /**
  * Steam OpenID provider adapter.
@@ -38,11 +38,11 @@ use Triangle\OAuth\Exception\UnexpectedApiResponseException;
  * Example:
  *
  *   $config = [
- *       'callback' => localzet\OAuth\HttpClient\Util::getCurrentUrl(),
+ *       'callback' => 'https:' . request()?->url(),
  *       'keys' => ['secret' => 'steam-api-key']
  *   ];
  *
- *   $adapter = new localzet\OAuth\Provider\Steam($config);
+ *   $adapter = new Triangle\OAuth\Provider\Steam($config);
  *
  *   try {
  *       $adapter->authenticate();

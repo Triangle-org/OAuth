@@ -26,17 +26,16 @@
 
 namespace Triangle\OAuth\Adapter;
 
+use Exception;
+use InvalidArgumentException;
 use Support\Collection;
-use Triangle\OAuth\Exception\AuthorizationDeniedException;
-use Triangle\OAuth\Exception\Exception;
-use Triangle\OAuth\Exception\HttpClientFailureException;
-use Triangle\OAuth\Exception\HttpRequestFailedException;
-use Triangle\OAuth\Exception\InvalidAccessTokenException;
-use Triangle\OAuth\Exception\InvalidApplicationCredentialsException;
-use Triangle\OAuth\Exception\InvalidArgumentException;
-use Triangle\OAuth\Exception\InvalidAuthorizationCodeException;
-use Triangle\OAuth\Exception\InvalidAuthorizationStateException;
-use Triangle\OAuth\HttpClient;
+use Triangle\Engine\Exception\AuthorizationDeniedException;
+use Triangle\Engine\Exception\HttpClientFailureException;
+use Triangle\Engine\Exception\HttpRequestFailedException;
+use Triangle\Engine\Exception\InvalidAccessTokenException;
+use Triangle\Engine\Exception\InvalidApplicationCredentialsException;
+use Triangle\Engine\Exception\InvalidAuthorizationCodeException;
+use Triangle\Engine\Exception\InvalidAuthorizationStateException;
 
 /**
  * This class  can be used to simplify the authorization flow of OAuth 2 based service providers.
@@ -342,7 +341,7 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
             $code = filter_input($_SERVER['REQUEST_METHOD'] === 'POST' ? INPUT_POST : INPUT_GET, 'code');
 
             if (empty($code)) {
-                $this->authenticateBegin();
+                return $this->authenticateBegin();
             } else {
                 $this->authenticateFinish();
             }
@@ -418,7 +417,7 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
 
         $this->logger->debug(sprintf('%s::authenticateBegin(), redirecting user to:', get_class($this)), [$authUrl]);
 
-        HttpClient\Util::redirect($authUrl);
+        return redirect($authUrl);
     }
 
     /**
@@ -433,7 +432,7 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
     {
         $this->logger->debug(
             sprintf('%s::authenticateFinish(), callback url:', get_class($this)),
-            [HttpClient\Util::getCurrentUrl(true)]
+            [request()?->fullUrl()]
         );
 
         $state = filter_input($_SERVER['REQUEST_METHOD'] === 'POST' ? INPUT_POST : INPUT_GET, 'state');

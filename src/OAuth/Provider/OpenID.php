@@ -34,7 +34,7 @@ use Triangle\OAuth\Adapter;
  * Example:
  *
  *   $config = [
- *       'callback' => localzet\OAuth\HttpClient\Util::getCurrentUrl(),
+ *       'callback' => 'https:' . request()?->url(),
  *
  *       //  authenticate with Yahoo openid
  *       'openid_identifier' => 'https://open.login.yahooapis.com/openid20/www.yahoo.com/xrds'
@@ -48,7 +48,7 @@ use Triangle\OAuth\Adapter;
  *       // etc.
  *   ];
  *
- *   $adapter = new localzet\OAuth\Provider\OpenID($config);
+ *   $adapter = new Triangle\OAuth\Provider\OpenID($config);
  *
  *   try {
  *       $adapter->authenticate();

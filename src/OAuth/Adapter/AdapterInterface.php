@@ -168,7 +168,7 @@ interface AdapterInterface
      *
      * @param Logger|null $logger
      */
-    public function setLogger(Logger $logger = null);
+    public function setLogger(?Logger $logger = null);
 
     /**
      * Return logger instance.

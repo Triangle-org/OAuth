@@ -28,8 +28,8 @@ namespace Triangle\OAuth\Provider;
 
 use Exception;
 use Support\Collection;
+use Triangle\Engine\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Adapter\OAuth2;
-use Triangle\OAuth\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Model\Profile;
 
 /**

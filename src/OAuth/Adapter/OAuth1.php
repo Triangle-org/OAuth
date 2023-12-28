@@ -26,16 +26,15 @@
 
 namespace Triangle\OAuth\Adapter;
 
+use Exception;
+use InvalidArgumentException;
 use Support\Collection;
-use Triangle\OAuth\Exception\AuthorizationDeniedException;
-use Triangle\OAuth\Exception\Exception;
-use Triangle\OAuth\Exception\HttpClientFailureException;
-use Triangle\OAuth\Exception\HttpRequestFailedException;
-use Triangle\OAuth\Exception\InvalidAccessTokenException;
-use Triangle\OAuth\Exception\InvalidApplicationCredentialsException;
-use Triangle\OAuth\Exception\InvalidArgumentException;
-use Triangle\OAuth\Exception\InvalidOauthTokenException;
-use Triangle\OAuth\HttpClient;
+use Triangle\Engine\Exception\AuthorizationDeniedException;
+use Triangle\Engine\Exception\HttpClientFailureException;
+use Triangle\Engine\Exception\HttpRequestFailedException;
+use Triangle\Engine\Exception\InvalidAccessTokenException;
+use Triangle\Engine\Exception\InvalidApplicationCredentialsException;
+use Triangle\Engine\Exception\InvalidOauthTokenException;
 use Triangle\OAuth\Thirdparty\OAuth\OAuthConsumer;
 use Triangle\OAuth\Thirdparty\OAuth\OAuthRequest;
 use Triangle\OAuth\Thirdparty\OAuth\OAuthSignatureMethodHMACSHA1;
@@ -241,10 +240,10 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
         try {
             if (!$this->getStoredData('request_token')) {
                 // Start a new flow.
-                $this->authenticateBegin();
+                return $this->authenticateBegin();
             } elseif (empty($_GET['oauth_token']) && empty($_GET['denied'])) {
                 // A previous authentication was not finished, and this request is not finishing it.
-                $this->authenticateBegin();
+                return $this->authenticateBegin();
             } else {
                 // Finish a flow.
                 $this->authenticateFinish();
@@ -286,7 +285,7 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
 
         $this->logger->debug(sprintf('%s::authenticateBegin(), redirecting user to:', get_class($this)), [$authUrl]);
 
-        HttpClient\Util::redirect($authUrl);
+        return redirect($authUrl);
     }
 
     /**
@@ -302,7 +301,7 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
     {
         $this->logger->debug(
             sprintf('%s::authenticateFinish(), callback url:', get_class($this)),
-            [HttpClient\Util::getCurrentUrl(true)]
+            [request()?->fullUrl()]
         );
 
         $denied = filter_input(INPUT_GET, 'denied');
@@ -553,7 +552,7 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
      * Send a signed request to provider API
      *
      * Note: Since the specifics of error responses is beyond the scope of RFC6749 and OAuth specifications,
-     * localzet\OAuth will consider any HTTP status code that is different than '200 OK' as an ERROR.
+     * Triangle\OAuth will consider any HTTP status code that is different than '200 OK' as an ERROR.
      *
      * @param string $url
      * @param string $method

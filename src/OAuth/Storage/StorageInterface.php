@@ -27,7 +27,7 @@
 namespace Triangle\OAuth\Storage;
 
 /**
- * localzet\OAuth storage manager interface
+ * Triangle\OAuth storage manager interface
  */
 interface StorageInterface
 {

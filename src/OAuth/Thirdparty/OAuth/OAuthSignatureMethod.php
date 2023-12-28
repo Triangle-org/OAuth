@@ -29,7 +29,7 @@ namespace Triangle\OAuth\Thirdparty\OAuth;
 /**
  * Class OAuthSignatureMethod
  *
- * @package localzet\OAuth\Thirdparty\OAuth
+ * @package Triangle\OAuth\Thirdparty\OAuth
  */
 abstract class OAuthSignatureMethod
 {

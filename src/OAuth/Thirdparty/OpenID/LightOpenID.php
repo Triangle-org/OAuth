@@ -27,7 +27,7 @@
 namespace Triangle\OAuth\Thirdparty\OpenID;
 
 
-use Triangle\OAuth\Exception\ErrorException;
+use ErrorException;
 
 /**
  * This class provides a simple interface for OpenID 1.1/2.0 authentication.

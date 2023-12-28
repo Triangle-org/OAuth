@@ -42,7 +42,7 @@ class OAuthUtil
     {
         if (is_array($input)) {
             return array_map(array(
-                '\localzet\OAuth\Thirdparty\OAuth\OAuthUtil',
+                '\Triangle\OAuth\Thirdparty\OAuth\OAuthUtil',
                 'urlencode_rfc3986'
             ), $input);
         } elseif (is_scalar($input)) {

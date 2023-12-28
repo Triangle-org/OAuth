@@ -2585,16 +2585,16 @@
         },
         {
             "name": "triangle/engine",
-            "version": "v5.2.2",
+            "version": "v5.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Triangle-org/Engine.git",
-                "reference": "4b6b26edb8868ddbfa03c3734bd377be2c82570b"
+                "reference": "b0eb8c142f44a832bec56c7b378f4d545d58c396"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Triangle-org/Engine/zipball/4b6b26edb8868ddbfa03c3734bd377be2c82570b",
-                "reference": "4b6b26edb8868ddbfa03c3734bd377be2c82570b",
+                "url": "https://api.github.com/repos/Triangle-org/Engine/zipball/b0eb8c142f44a832bec56c7b378f4d545d58c396",
+                "reference": "b0eb8c142f44a832bec56c7b378f4d545d58c396",
                 "shasum": ""
             },
             "require": {
@@ -2660,7 +2660,7 @@
                 "email": "support@localzet.com",
                 "source": "https://github.com/Triangle-org/Engine"
             },
-            "time": "2023-12-27T22:52:27+00:00"
+            "time": "2023-12-28T01:15:58+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

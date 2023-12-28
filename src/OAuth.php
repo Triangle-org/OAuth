@@ -27,17 +27,18 @@
 namespace Triangle;
 
 use FilesystemIterator;
-use localzet\HTTP\Client;
+use InvalidArgumentException;
+use localzet\HTTP\Client as HttpClient;
 use Monolog\Logger;
 use SplFileInfo;
 use support\Log;
+use Triangle\Engine\Http\Response;
 use Triangle\OAuth\Adapter\AdapterInterface;
-use Triangle\OAuth\Exception\InvalidArgumentException;
-use Triangle\OAuth\Exception\UnexpectedValueException;
 use Triangle\OAuth\Storage\StorageInterface;
+use UnexpectedValueException;
 
 /**
- * localzet\OAuth - Localzet Identification System
+ * Triangle\OAuth
  *
  */
 class OAuth
@@ -59,9 +60,9 @@ class OAuth
     /**
      * HttpClient.
      *
-     * @var Client|null
+     * @var HttpClient|null
      */
-    protected ?Client $httpClient;
+    protected ?HttpClient $httpClient;
 
     /**
      * Logger.
@@ -72,6 +73,21 @@ class OAuth
 
     /**
      * @param array|string $config Массив с конфигурацией или путем к файлу PHP, который вернет массив
+     * <code>
+     * [
+     *  'callback' => '',
+     *  'providers' => [
+     *      'enabled' => true,
+     *      'callback' => '',
+     *      'adapter' => 'Triangle\\OAuth\\Provider\\%s',
+     *      'keys' => [
+     *          'key' => '',
+     *          'secret' => '',
+     *      ],
+     *  ],
+     * ]
+     * </code>
+     *
      * @param StorageInterface|null $storage
      * @param Logger|null $logger
      *
@@ -89,15 +105,10 @@ class OAuth
             throw new InvalidArgumentException('OAuth Config не существует на данном пути');
         }
 
-        $this->config = $config + [
-                'debug_mode' => Logger::DEBUG,
-                'debug_file' => '',
-                'curl_options' => null,
-                'providers' => []
-            ];
+        $this->config = $config + ['providers' => []];
         $this->storage = $storage;
         $this->logger = $logger ?? Log::channel();
-        $this->httpClient = new Client();
+        $this->httpClient = new HttpClient();
     }
 
     /**
@@ -109,15 +120,19 @@ class OAuth
      *
      * @param string $name adapter's name (case insensitive)
      *
-     * @return AdapterInterface
+     * @return AdapterInterface|Response
      * @throws InvalidArgumentException
      * @throws UnexpectedValueException
      */
-    public function authenticate(string $name): AdapterInterface
+    public function authenticate(string $name): AdapterInterface|Response
     {
         $adapter = $this->getAdapter($name);
 
-        $adapter->authenticate();
+        $authenticate = $adapter->authenticate();
+
+        if ($authenticate && $authenticate instanceof Response) {
+            return $authenticate;
+        }
 
         return $adapter;
     }
@@ -135,7 +150,7 @@ class OAuth
     {
         $config = $this->getProviderConfig($name);
 
-        $adapter = $config['adapter'] ?? sprintf('localzet\\OAuth\\Provider\\%s', $name);
+        $adapter = $config['adapter'] ?? sprintf('Triangle\\OAuth\\Provider\\%s', $name);
 
         if (!class_exists($adapter)) {
             $adapter = null;
@@ -145,7 +160,7 @@ class OAuth
                 if (!$file->isDir()) {
                     $provider = strtok($file->getFilename(), '.');
                     if (mb_strtolower($name) === mb_strtolower($provider)) {
-                        $adapter = sprintf('localzet\\OAuth\\Provider\\%s', $provider);
+                        $adapter = sprintf('Triangle\\OAuth\\Provider\\%s', $provider);
                         break;
                     }
                 }
@@ -183,10 +198,6 @@ class OAuth
         }
 
         $config = $providersConfig[$name];
-        $config += [
-            'debug_mode' => $this->config['debug_mode'],
-            'debug_file' => $this->config['debug_file'],
-        ];
 
         if (!isset($config['callback']) && isset($this->config['callback'])) {
             $config['callback'] = $this->config['callback'];

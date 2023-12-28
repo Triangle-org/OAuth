@@ -29,7 +29,7 @@ namespace Triangle\OAuth\Thirdparty\OAuth;
 /**
  * Class OAuthSignatureMethodHMACSHA1
  *
- * @package localzet\OAuth\Thirdparty\OAuth
+ * @package Triangle\OAuth\Thirdparty\OAuth
  */
 class OAuthSignatureMethodHMACSHA1 extends OAuthSignatureMethod
 {

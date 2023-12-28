@@ -26,7 +26,7 @@
 
 namespace Triangle\OAuth\Model;
 
-use Triangle\OAuth\Exception\UnexpectedValueException;
+use UnexpectedValueException;
 
 /**
  * Triangle\OAuth\Model\Contact

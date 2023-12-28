@@ -27,12 +27,12 @@
 namespace Triangle\OAuth\Provider;
 
 use Support\Collection;
+use Throwable;
+use Triangle\Engine\Exception\InvalidApplicationCredentialsException;
+use Triangle\Engine\Exception\InvalidAuthorizationCodeException;
+use Triangle\Engine\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Adapter\AbstractAdapter;
 use Triangle\OAuth\Adapter\AdapterInterface;
-use Triangle\OAuth\Exception\InvalidApplicationCredentialsException;
-use Triangle\OAuth\Exception\InvalidAuthorizationCodeException;
-use Triangle\OAuth\Exception\UnexpectedApiResponseException;
-use Triangle\OAuth\HttpClient\Util;
 use Triangle\OAuth\Model\Profile;
 
 /**
@@ -52,11 +52,11 @@ use Triangle\OAuth\Model\Profile;
  * Example:
  *
  *   $config = [
- *       'callback' => localzet\OAuth\HttpClient\Util::getCurrentUrl(),
+ *       'callback' => 'https:' . request()?->url(),
  *       'keys' => ['id' => 'your_bot_name', 'secret' => 'your_bot_token'],
  *   ];
  *
- *   $adapter = new localzet\OAuth\Provider\Telegram($config);
+ *   $adapter = new Triangle\OAuth\Provider\Telegram($config);
  *
  *   try {
  *       $adapter->authenticate();
@@ -115,7 +115,7 @@ class Telegram extends AbstractAdapter implements AdapterInterface
     {
         $this->logger->info(sprintf('%s::authenticate()', get_class($this)));
         if (!filter_input(INPUT_GET, 'hash')) {
-            $this->authenticateBegin();
+            return $this->authenticateBegin();
         } else {
             $this->authenticateCheckError();
             $this->authenticateFinish();
@@ -200,6 +200,7 @@ class Telegram extends AbstractAdapter implements AdapterInterface
 
     /**
      * See: https://telegram.im/widget-login.php
+     * @throws Throwable
      */
     protected function authenticateBegin()
     {
@@ -208,18 +209,18 @@ class Telegram extends AbstractAdapter implements AdapterInterface
         $nonce = $this->config->get('nonce');
         $nonce_code = empty($nonce) ? '' : "nonce=\"{$nonce}\"";
 
-        exit(
-        <<<HTML
-<center>
-    <script async src="https://telegram.org/js/telegram-widget.js?7"
-            {$nonce_code}
-            data-telegram-login="{$this->botId}"
-            data-size="large"
-            data-auth-url="{$this->callbackUrl}"
-            data-request-access="write">
-    </script>
-</center>
-HTML
+        return response(
+            <<<HTML
+            <center>
+                <script async src="https://telegram.org/js/telegram-widget.js?7"
+                        {$nonce_code}
+                        data-telegram-login="{$this->botId}"
+                        data-size="large"
+                        data-auth-url="{$this->callbackUrl}"
+                        data-request-access="write">
+                </script>
+            </center>
+            HTML
         );
     }
 
@@ -227,7 +228,7 @@ HTML
     {
         $this->logger->debug(
             sprintf('%s::authenticateFinish(), callback url:', get_class($this)),
-            [Util::getCurrentUrl(true)]
+            [request()?->fullUrl()]
         );
 
         $this->storeData('auth_data', $this->parseAuthData());

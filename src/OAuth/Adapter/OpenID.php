@@ -26,13 +26,12 @@
 
 namespace Triangle\OAuth\Adapter;
 
+use ErrorException;
+use InvalidArgumentException;
 use Support\Collection;
-use Triangle\OAuth\Exception\AuthorizationDeniedException;
-use Triangle\OAuth\Exception\ErrorException;
-use Triangle\OAuth\Exception\InvalidArgumentException;
-use Triangle\OAuth\Exception\InvalidOpenidIdentifierException;
-use Triangle\OAuth\Exception\UnexpectedApiResponseException;
-use Triangle\OAuth\HttpClient;
+use Triangle\Engine\Exception\AuthorizationDeniedException;
+use Triangle\Engine\Exception\InvalidOpenidIdentifierException;
+use Triangle\Engine\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Model\Profile;
 use Triangle\OAuth\Thirdparty\OpenID\LightOpenID;
 
@@ -116,7 +115,7 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
         }
 
         if (empty($_REQUEST['openid_mode'])) {
-            $this->authenticateBegin();
+            return $this->authenticateBegin();
         } else {
             return $this->authenticateFinish();
         }
@@ -174,7 +173,7 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
 
         $this->logger->debug(sprintf('%s::authenticateBegin(), redirecting user to:', get_class($this)), [$authUrl]);
 
-        HttpClient\Util::redirect($authUrl);
+        return redirect($authUrl);
     }
 
     /**
@@ -187,7 +186,7 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
     {
         $this->logger->debug(
             sprintf('%s::authenticateFinish(), callback url:', get_class($this)),
-            [HttpClient\Util::getCurrentUrl(true)]
+            [request()?->fullUrl()]
         );
 
         if ($this->openIdClient->mode == 'cancel') {

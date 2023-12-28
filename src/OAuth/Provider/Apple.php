@@ -34,13 +34,13 @@ use Firebase\JWT\Key;
 use phpseclib3\Crypt\PublicKeyLoader;
 use phpseclib3\Math\BigInteger;
 use Support\Collection;
+use Triangle\Engine\Exception\HttpClientFailureException;
+use Triangle\Engine\Exception\HttpRequestFailedException;
+use Triangle\Engine\Exception\InvalidAccessTokenException;
+use Triangle\Engine\Exception\InvalidApplicationCredentialsException;
 use Triangle\OAuth\Adapter\OAuth2;
-use Triangle\OAuth\Exception\HttpClientFailureException;
-use Triangle\OAuth\Exception\HttpRequestFailedException;
-use Triangle\OAuth\Exception\InvalidAccessTokenException;
-use Triangle\OAuth\Exception\InvalidApplicationCredentialsException;
-use Triangle\OAuth\Exception\UnexpectedValueException;
 use Triangle\OAuth\Model\Profile;
+use UnexpectedValueException;
 
 /**
  * Apple OAuth2 provider adapter.
@@ -48,7 +48,7 @@ use Triangle\OAuth\Model\Profile;
  * Example:
  *
  *   $config = [
- *       'callback' => localzet\OAuth\HttpClient\Util::getCurrentUrl(),
+ *       'callback' => 'https:' . request()?->url(),
  *       'keys' => ['id' => '', 'team_id' => '', 'key_id' => '', 'key_file' => '', 'key_content' => ''],
  *       'scope' => 'name email',
  *
@@ -58,7 +58,7 @@ use Triangle\OAuth\Model\Profile;
  *       ]
  *   ];
  *
- *   $adapter = new localzet\OAuth\Provider\Apple($config);
+ *   $adapter = new Triangle\OAuth\Provider\Apple($config);
  *
  *   try {
  *       $adapter->authenticate();

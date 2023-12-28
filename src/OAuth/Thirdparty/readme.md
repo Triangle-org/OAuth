@@ -12,6 +12,6 @@ Notes:
 
 ```
 We no longer use the old OAuth clients. Please don't add new libs to this folder, unless strictly necessary.
-Both LightOpenID and OAuth are (to be) partially/indirectly tested within the localzet\OAuth library.
+Both LightOpenID and OAuth are (to be) partially/indirectly tested within the Triangle\OAuth library.
 Both LightOpenID and OAuth libraries are excluded from Codeclimate.com Analysis/GPA.
 ```

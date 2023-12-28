@@ -26,14 +26,15 @@
 
 namespace Triangle\OAuth\Adapter;
 
+use InvalidArgumentException;
 use localzet\HTTP\Client as HttpClient;
 use Monolog\Logger;
 use ReflectionClass;
 use Support\Collection;
-use Triangle\OAuth\Exception\HttpClientFailureException;
-use Triangle\OAuth\Exception\HttpRequestFailedException;
-use Triangle\OAuth\Exception\InvalidArgumentException;
-use Triangle\OAuth\Exception\NotImplementedException;
+use support\Log;
+use Triangle\Engine\Exception\HttpClientFailureException;
+use Triangle\Engine\Exception\HttpRequestFailedException;
+use Triangle\Engine\Exception\NotImplementedException;
 use Triangle\OAuth\Storage\Session;
 use Triangle\OAuth\Storage\StorageInterface;
 
@@ -306,12 +307,9 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function setLogger(Logger $logger = null)
+    public function setLogger(?Logger $logger = null)
     {
-        $this->logger = $logger ?: new Logger(
-            $this->config->get('debug_mode'),
-            $this->config->get('debug_file')
-        );
+        $this->logger = $logger ?: Log::channel();
 
         if (method_exists($this->httpClient, 'setLogger')) {
             $this->httpClient->setLogger($this->logger);
@@ -365,7 +363,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Validate signed API responses Http status code.
      *
      * Since the specifics of error responses is beyond the scope of RFC6749 and OAuth Core specifications,
-     * localzet\OAuth will consider any HTTP status code that is different than '200 OK' as an ERROR.
+     * Triangle\OAuth will consider any HTTP status code that is different than '200 OK' as an ERROR.
      *
      * @param string $error String to pre append to message thrown in exception
      *
