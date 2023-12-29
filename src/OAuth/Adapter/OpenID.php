@@ -30,8 +30,8 @@ use ErrorException;
 use InvalidArgumentException;
 use Support\Collection;
 use Triangle\Engine\Exception\AuthorizationDeniedException;
+use Triangle\Engine\Exception\InvalidOpenidIdentifierException;
 use Triangle\Engine\Exception\UnexpectedApiResponseException;
-use Triangle\OAuth\Exception\InvalidOpenidIdentifierException;
 use Triangle\OAuth\Model\Profile;
 use Triangle\OAuth\Thirdparty\OpenID\LightOpenID;
 
