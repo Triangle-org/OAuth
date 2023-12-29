@@ -28,9 +28,7 @@ namespace Triangle\OAuth\Provider;
 
 use Composer\InstalledVersions;
 use Exception;
-use Firebase\JWT\ExpiredException;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
+use localzet\JWT;
 use phpseclib3\Crypt\PublicKeyLoader;
 use phpseclib3\Math\BigInteger;
 use Support\Collection;
@@ -73,7 +71,7 @@ use UnexpectedValueException;
  * Requires:
  *
  * composer require codercat/jwk-to-pem
- * composer require firebase/php-jwt
+ * composer require localzet/jwt
  *
  * @see https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_rest_api
  */
@@ -204,8 +202,6 @@ class Apple extends OAuth2
             // validate the token signature and get the payload
             $publicKeys = $this->apiRequest('keys');
 
-            JWT::$leeway = 120;
-
             $error = false;
             $payload = null;
 
@@ -224,15 +220,11 @@ class Apple extends OAuth2
 
                     $pem = (string)$key;
 
-                    $payload = (version_compare($this->getJwtVersion(), '6.2') < 0) ?
-                        JWT::decode($id_token, $pem, ['RS256']) :
-                        JWT::decode($id_token, new Key($pem, 'RS256'));
+                    $payload = JWT::decode($id_token, $pem, 'RS256');
                     break;
                 } catch (Exception $e) {
                     $error = $e->getMessage();
-                    if ($e instanceof ExpiredException) {
-                        break;
-                    }
+                    break;
                 }
             }
 
