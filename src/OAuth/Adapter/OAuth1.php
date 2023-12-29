@@ -175,7 +175,7 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
 
         if (!$this->consumerKey || !$this->consumerSecret) {
             throw new InvalidApplicationCredentialsException(
-                'Ваш идентификатор приложения требуется для подключения к ' . $this->providerId
+                'Для подключения к ' . $this->providerId . ' требуется идентификатор приложения'
             );
         }
 

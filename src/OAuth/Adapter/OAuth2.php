@@ -274,7 +274,7 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
 
         if (!$this->clientId || !$this->clientSecret) {
             throw new InvalidApplicationCredentialsException(
-                'Ваш идентификатор приложения требуется для подключения к ' . $this->providerId
+                'Для подключения к ' . $this->providerId . ' требуется идентификатор приложения'
             );
         }
 
