@@ -338,7 +338,7 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
         try {
             $this->authenticateCheckError();
 
-            $code = filter_input($_SERVER['REQUEST_METHOD'] === 'POST' ? INPUT_POST : INPUT_GET, 'code');
+            $code = strtolower(request()->method()) == 'post' ? request()->post('code') : request()->get('code');
 
             if (empty($code)) {
                 return $this->authenticateBegin();
@@ -389,11 +389,11 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
      */
     protected function authenticateCheckError()
     {
-        $error = filter_input(INPUT_GET, 'error', FILTER_SANITIZE_SPECIAL_CHARS);
+        $error = htmlspecialchars(request()->get('error'));
 
         if (!empty($error)) {
-            $error_description = filter_input(INPUT_GET, 'error_description', FILTER_SANITIZE_SPECIAL_CHARS);
-            $error_uri = filter_input(INPUT_GET, 'error_uri', FILTER_SANITIZE_SPECIAL_CHARS);
+            $error_description = htmlspecialchars(request()->get('error_description'));
+            $error_uri = htmlspecialchars(request()->get('error_uri'));
 
             $collated_error = sprintf('Провайдер вернул ошибку: %s %s %s', $error, $error_description, $error_uri);
 
@@ -435,8 +435,8 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
             [request()?->fullUrl()]
         );
 
-        $state = filter_input($_SERVER['REQUEST_METHOD'] === 'POST' ? INPUT_POST : INPUT_GET, 'state');
-        $code = filter_input($_SERVER['REQUEST_METHOD'] === 'POST' ? INPUT_POST : INPUT_GET, 'code');
+        $state = strtolower(request()->method()) == 'post' ? request()->post('state') : request()->get('state');
+        $code = strtolower(request()->method()) == 'post' ? request()->post('code') : request()->get('code');
 
         /**
          * Authorization Request State

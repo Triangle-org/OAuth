@@ -241,7 +241,7 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
             if (!$this->getStoredData('request_token')) {
                 // Start a new flow.
                 return $this->authenticateBegin();
-            } elseif (empty($_GET['oauth_token']) && empty($_GET['denied'])) {
+            } elseif (!request()->get('oauth_token') && !request()->get('denied')) {
                 // A previous authentication was not finished, and this request is not finishing it.
                 return $this->authenticateBegin();
             } else {
@@ -304,10 +304,10 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
             [request()?->fullUrl()]
         );
 
-        $denied = filter_input(INPUT_GET, 'denied');
-        $oauth_problem = filter_input(INPUT_GET, 'oauth_problem');
-        $oauth_token = filter_input(INPUT_GET, 'oauth_token');
-        $oauth_verifier = filter_input(INPUT_GET, 'oauth_verifier');
+        $denied = request()->get('denied');
+        $oauth_problem = request()->get('oauth_problem');
+        $oauth_token = request()->get('oauth_token');
+        $oauth_verifier = request()->get('oauth_verifier');
 
         if ($denied) {
             throw new AuthorizationDeniedException(

@@ -95,10 +95,10 @@ class LightOpenID
         $this->set_realm($host);
         $this->set_proxy($proxy);
 
-        $uri = rtrim(preg_replace('#((?<=\?)|&)openid\.[^&]+#', '', $_SERVER['REQUEST_URI']), '?');
+        $uri = rtrim(preg_replace('#((?<=\?)|&)openid\.[^&]+#', '', request()->uri()), '?');
         $this->returnUrl = $this->trustRoot . $uri;
 
-        $this->data = ($_SERVER['REQUEST_METHOD'] === 'POST') ? $_POST : $_GET;
+        $this->data = (strtolower(request()->method()) == 'post') ? request()->post() : request()->get();
 
         if (!function_exists('curl_init') && !in_array('https', stream_get_wrappers())) {
             throw new ErrorException('You must have either https wrappers or curl enabled.');
@@ -248,12 +248,12 @@ class LightOpenID
      */
     protected function get_realm_protocol()
     {
-        if (!empty($_SERVER['HTTPS'])) {
-            $use_secure_protocol = ($_SERVER['HTTPS'] !== 'off');
-        } elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
-            $use_secure_protocol = ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https');
-        } elseif (isset($_SERVER['HTTP__WSSC'])) {
-            $use_secure_protocol = ($_SERVER['HTTP__WSSC'] == 'https');
+        if (request()->header('HTTPS') !== null) {
+            $use_secure_protocol = (request()->header('HTTPS') !== 'off');
+        } elseif (request()->header('X_FORWARDED_PROTO') !== null) {
+            $use_secure_protocol = (request()->header('X_FORWARDED_PROTO') == 'https');
+        } elseif (request()->header('_WSSC') !== null) {
+            $use_secure_protocol = (request()->header('_WSSC') == 'https');
         } else {
             $use_secure_protocol = false;
         }
