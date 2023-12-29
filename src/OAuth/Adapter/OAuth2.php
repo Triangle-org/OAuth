@@ -389,11 +389,11 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
      */
     protected function authenticateCheckError()
     {
-        $error = htmlspecialchars(request()->get('error'));
+        $error = htmlspecialchars(request()->get('error') ?? '');
 
         if (!empty($error)) {
-            $error_description = htmlspecialchars(request()->get('error_description'));
-            $error_uri = htmlspecialchars(request()->get('error_uri'));
+            $error_description = htmlspecialchars(request()->get('error_description') ?? '');
+            $error_uri = htmlspecialchars(request()->get('error_uri') ?? '');
 
             $collated_error = sprintf('Провайдер вернул ошибку: %s %s %s', $error, $error_description, $error_uri);
 
