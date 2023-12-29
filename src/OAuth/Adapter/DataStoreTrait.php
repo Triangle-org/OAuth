@@ -56,7 +56,7 @@ trait DataStoreTrait
             $this->deleteStoredData($name);
         }
 
-        $this->getStorage()->set($this->providerId . '.' . $name, $value);
+        $this->getStorage()->set($this->providerId . '_' . $name, $value);
     }
 
     /**
@@ -72,7 +72,7 @@ trait DataStoreTrait
      */
     protected function getStoredData($name)
     {
-        return $this->getStorage()->get($this->providerId . '.' . $name);
+        return $this->getStorage()->get($this->providerId . '_' . $name);
     }
 
     /**
@@ -82,7 +82,7 @@ trait DataStoreTrait
      */
     protected function deleteStoredData($name)
     {
-        $this->getStorage()->delete($this->providerId . '.' . $name);
+        $this->getStorage()->delete($this->providerId . '_' . $name);
     }
 
     /**
@@ -90,6 +90,6 @@ trait DataStoreTrait
      */
     protected function clearStoredData()
     {
-        $this->getStorage()->deleteMatch($this->providerId . '.');
+        $this->getStorage()->deleteMatch($this->providerId . '_');
     }
 }

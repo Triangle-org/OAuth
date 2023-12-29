@@ -78,17 +78,7 @@ class Session implements StorageInterface
         }
 
         $tmp = session($this->storeNamespace);
-//        $tmp[$key] = $value;
-        $keys = explode('.', $key);
-        while (count($keys) > 1) {
-            $key = array_shift($keys);
-            if (!isset($tmp[$key]) || !is_array($tmp[$key])) {
-                $tmp[$key] = [];
-            }
-            $tmp = &$tmp[$key];
-        }
-        $tmp[array_shift($keys)] = $value;
-
+        $tmp[$key] = $value;
         session()->set($this->storeNamespace, $tmp);
         session()->save();
     }
