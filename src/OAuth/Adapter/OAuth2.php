@@ -33,9 +33,9 @@ use Triangle\Engine\Exception\AuthorizationDeniedException;
 use Triangle\Engine\Exception\HttpClientFailureException;
 use Triangle\Engine\Exception\HttpRequestFailedException;
 use Triangle\Engine\Exception\InvalidAccessTokenException;
-use Triangle\Engine\Exception\InvalidApplicationCredentialsException;
 use Triangle\Engine\Exception\InvalidAuthorizationCodeException;
 use Triangle\Engine\Exception\InvalidAuthorizationStateException;
+use Triangle\OAuth\Exception\InvalidApplicationCredentialsException;
 
 /**
  * This class  can be used to simplify the authorization flow of OAuth 2 based service providers.

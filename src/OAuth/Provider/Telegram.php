@@ -28,11 +28,11 @@ namespace Triangle\OAuth\Provider;
 
 use Support\Collection;
 use Throwable;
-use Triangle\Engine\Exception\InvalidApplicationCredentialsException;
 use Triangle\Engine\Exception\InvalidAuthorizationCodeException;
 use Triangle\Engine\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Adapter\AbstractAdapter;
 use Triangle\OAuth\Adapter\AdapterInterface;
+use Triangle\OAuth\Exception\InvalidApplicationCredentialsException;
 use Triangle\OAuth\Model\Profile;
 
 /**
