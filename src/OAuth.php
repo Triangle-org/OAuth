@@ -154,7 +154,7 @@ class OAuth
 
         if (!class_exists($adapter)) {
             $adapter = null;
-            $fs = new FilesystemIterator(__DIR__ . '/Provider/');
+            $fs = new FilesystemIterator(__DIR__ . '/OAuth/Provider/');
             /** @var SplFileInfo $file */
             foreach ($fs as $file) {
                 if (!$file->isDir()) {
