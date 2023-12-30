@@ -90,6 +90,13 @@ final class Profile
     public $lastName = null;
 
     /**
+     * User's middle name
+     *
+     * @var string|null
+     */
+    public $middleName = null;
+
+    /**
      * male or female
      *
      * @var string|null
