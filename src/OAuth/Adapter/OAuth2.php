@@ -143,7 +143,7 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
      *
      * @var string
      */
-    protected $callback = '';
+    protected string $callback = '';
 
     /**
      * Authorization Url Parameters

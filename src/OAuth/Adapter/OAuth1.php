@@ -35,10 +35,12 @@ use Triangle\Engine\Exception\HttpRequestFailedException;
 use Triangle\Engine\Exception\InvalidAccessTokenException;
 use Triangle\Engine\Exception\InvalidApplicationCredentialsException;
 use Triangle\Engine\Exception\InvalidOauthTokenException;
-use Triangle\OAuth\Thirdparty\OAuth\OAuthConsumer;
-use Triangle\OAuth\Thirdparty\OAuth\OAuthRequest;
-use Triangle\OAuth\Thirdparty\OAuth\OAuthSignatureMethodHMACSHA1;
-use Triangle\OAuth\Thirdparty\OAuth\OAuthUtil;
+use Triangle\OAuth\Adapter\OAuth1\OAuthConsumer;
+use Triangle\OAuth\Adapter\OAuth1\OAuthRequest;
+use Triangle\OAuth\Adapter\OAuth1\OAuthSignatureMethod;
+use Triangle\OAuth\Adapter\OAuth1\OAuthSignatureMethod_HMAC_SHA1;
+use Triangle\OAuth\Adapter\OAuth1\OAuthToken;
+use Triangle\OAuth\Adapter\OAuth1\OAuthUtil;
 
 /**
  * This class  can be used to simplify the authorization flow of OAuth 1 based service providers.
@@ -102,19 +104,19 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
     protected $consumerSecret = null;
 
     /**
-     * @var object
+     * @var OAuthConsumer|null
      */
-    protected $OAuthConsumer = null;
+    protected ?OAuthConsumer $OAuthConsumer = null;
 
     /**
-     * @var object
+     * @var OAuthSignatureMethod|null
      */
-    protected $sha1Method = null;
+    protected ?OAuthSignatureMethod $sha1Method = null;
 
     /**
-     * @var object
+     * @var OAuthToken|null
      */
-    protected $consumerToken = null;
+    protected ?OAuthToken $consumerToken = null;
 
     /**
      * Authorization Url Parameters
@@ -204,7 +206,7 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
          *
          * http://oauth.net/core/1.0a/#signing_process
          */
-        $this->sha1Method = new OAuthSignatureMethodHMACSHA1();
+        $this->sha1Method = new OAuthSignatureMethod_HMAC_SHA1();
 
         $this->OAuthConsumer = new OAuthConsumer(
             $this->consumerKey,
@@ -212,14 +214,14 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
         );
 
         if ($this->getStoredData('request_token')) {
-            $this->consumerToken = new OAuthConsumer(
+            $this->consumerToken = new OAuthToken(
                 $this->getStoredData('request_token'),
                 $this->getStoredData('request_token_secret')
             );
         }
 
         if ($this->getStoredData('access_token')) {
-            $this->consumerToken = new OAuthConsumer(
+            $this->consumerToken = new OAuthToken(
                 $this->getStoredData('access_token'),
                 $this->getStoredData('access_token_secret')
             );
@@ -438,7 +440,7 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
             );
         }
 
-        $this->consumerToken = new OAuthConsumer(
+        $this->consumerToken = new OAuthToken(
             $tokens['oauth_token'],
             $tokens['oauth_token_secret']
         );
@@ -534,7 +536,7 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
             );
         }
 
-        $this->consumerToken = new OAuthConsumer(
+        $this->consumerToken = new OAuthToken(
             $collection->get('oauth_token'),
             $collection->get('oauth_token_secret')
         );
@@ -609,13 +611,13 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
             $this->consumerToken,
             $method,
             $uri,
-            $signing_parameters
+            $signing_parameters,
         );
 
         $request->sign_request(
             $this->sha1Method,
             $this->OAuthConsumer,
-            $this->consumerToken
+            $this->consumerToken,
         );
 
         $uri = $request->get_normalized_http_url();

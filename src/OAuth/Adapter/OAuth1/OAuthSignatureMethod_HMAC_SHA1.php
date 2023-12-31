@@ -24,31 +24,43 @@
  *              For any questions, please contact <creator@localzet.com>
  */
 
-namespace Triangle\OAuth\Thirdparty\OAuth;
+namespace Triangle\OAuth\Adapter\OAuth1;
 
 /**
- * Class OAuthSignatureMethodHMACSHA1
+ * Класс OAuthSignatureMethod_HMAC_SHA1
  *
- * @package Triangle\OAuth\Thirdparty\OAuth
+ * Этот класс представляет собой метод подписи HMAC-SHA1 для OAuth.
+ *
+ * @author Ivan Zorin
+ * @author Andy Smith
+ *
+ * @link https://code.google.com/archive/p/oauth
+ * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class OAuthSignatureMethodHMACSHA1 extends OAuthSignatureMethod
+class OAuthSignatureMethod_HMAC_SHA1 extends OAuthSignatureMethod
 {
     /**
-     * @return string
+     * Должен возвращать имя метода подписи (то есть HMAC-SHA1).
+     *
+     * @return string Имя метода подписи.
      */
-    public function get_name()
+    public function get_name(): string
     {
         return "HMAC-SHA1";
     }
 
     /**
-     * @param $request
-     * @param $consumer
-     * @param $token
+     * Создает подпись.
+     * ПРИМЕЧАНИЕ: вывод этой функции НЕ ДОЛЖЕН быть закодирован в URL.
+     * Кодирование обрабатывается в OAuthRequest, когда окончательный
+     * запрос сериализуется.
      *
-     * @return string
+     * @param OAuthRequest $request Запрос OAuth.
+     * @param OAuthConsumer $consumer Потребитель OAuth.
+     * @param OAuthToken $token Токен OAuth.
+     * @return string Подпись.
      */
-    public function build_signature($request, $consumer, $token)
+    public function build_signature($request, $consumer, $token): string
     {
         $base_string = $request->get_signature_base_string();
         $request->base_string = $base_string;

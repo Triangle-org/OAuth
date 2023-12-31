@@ -24,28 +24,53 @@
  *              For any questions, please contact <creator@localzet.com>
  */
 
-namespace Triangle\OAuth\Thirdparty\OAuth;
+namespace Triangle\OAuth\Adapter\OAuth1;
 
 /**
- * Class OAuthRequest
+ * Класс OAuthRequest
  *
- * @package Triangle\OAuth\Thirdparty\OAuth
+ * Этот класс представляет собой запрос OAuth.
+ *
+ * @author Ivan Zorin
+ * @author Andy Smith
+ *
+ * @link https://code.google.com/archive/p/oauth Google Code
+ * @license http://opensource.org/licenses/mit-license.php MIT License
  */
 class OAuthRequest
 {
+    /**
+     * @var array $parameters Параметры запроса.
+     */
     public $parameters;
+
+    /**
+     * @var string $http_method HTTP-метод запроса.
+     */
     public $http_method;
+
+    /**
+     * @var string $http_url HTTP-URL запроса.
+     */
     public $http_url;
-    // for debug purposes
+
+    // для целей отладки
+    /**
+     * @var string $base_string Базовая строка запроса.
+     */
     public $base_string;
+
+    /**
+     * @var string $version Версия OAuth.
+     */
     public static $version = '1.0';
 
     /**
-     * OAuthRequest constructor.
+     * Конструктор OAuthRequest.
      *
-     * @param      $http_method
-     * @param      $http_url
-     * @param null $parameters
+     * @param string $http_method HTTP-метод запроса.
+     * @param string $http_url HTTP-URL запроса.
+     * @param array|null $parameters Параметры запроса.
      */
     public function __construct($http_method, $http_url, $parameters = null)
     {
@@ -57,15 +82,16 @@ class OAuthRequest
     }
 
     /**
-     * pretty much a helper function to set up the request
-     * @param      $consumer
-     * @param      $token
-     * @param      $http_method
-     * @param      $http_url
-     * @param null $parameters
-     * @return OAuthRequest
+     * Вспомогательная функция для настройки запроса.
+     *
+     * @param OAuthConsumer $consumer Потребитель OAuth.
+     * @param OAuthToken $token Токен OAuth.
+     * @param string $http_method HTTP-метод запроса.
+     * @param string $http_url HTTP-URL запроса.
+     * @param array|null $parameters Параметры запроса.
+     * @return OAuthRequest Запрос OAuth.
      */
-    public static function from_consumer_and_token($consumer, $token, $http_method, $http_url, $parameters = null)
+    public static function from_consumer_and_token($consumer, $token, $http_method, $http_url, $parameters = null): OAuthRequest
     {
         $parameters = ($parameters) ?: array();
         $defaults = array(
@@ -84,17 +110,16 @@ class OAuthRequest
     }
 
     /**
-     * @param      $name
-     * @param      $value
-     * @param bool $allow_duplicates
+     * Устанавливает параметр запроса.
+     *
+     * @param string $name Имя параметра.
+     * @param mixed $value Значение параметра.
+     * @param bool $allow_duplicates Разрешить дубликаты.
      */
-    public function set_parameter($name, $value, $allow_duplicates = true)
+    public function set_parameter($name, $value, $allow_duplicates = true): void
     {
         if ($allow_duplicates && isset($this->parameters[$name])) {
-            // We have already added parameter(s) with this name, so add to the list
             if (is_scalar($this->parameters[$name])) {
-                // This is the first duplicate, so transform scalar (string)
-                // into an array so we can add the duplicates
                 $this->parameters[$name] = array(
                     $this->parameters[$name]
                 );
@@ -107,50 +132,20 @@ class OAuthRequest
     }
 
     /**
-     * @param $name
+     * Возвращает параметры запроса, отсортированные и объединенные в нормализованную строку.
      *
-     * @return mixed|null
-     */
-    public function get_parameter($name)
-    {
-        return $this->parameters[$name] ?? null;
-    }
-
-    /**
-     * @return array
-     */
-    public function get_parameters(): array
-    {
-        return $this->parameters;
-    }
-
-    /**
-     * @param $name
-     */
-    public function unset_parameter($name)
-    {
-        unset($this->parameters[$name]);
-    }
-
-    /**
-     * The request parameters, sorted and concatenated into a normalized string.
-     *
-     * @return string
+     * @return string Нормализованная строка параметров.
      */
     public function get_signable_parameters()
     {
         $params = [];
 
-        // Grab all parameters.
         foreach ($this->parameters as $key_param => $value_param) {
-            // Process only scalar values.
             if (is_scalar($value_param)) {
                 $params[$key_param] = $value_param;
             }
         }
 
-        // Remove oauth_signature if present
-        // Ref: Spec: 9.1.1 ("The oauth_signature parameter MUST be excluded.")
         if (isset($params['oauth_signature'])) {
             unset($params['oauth_signature']);
         }
@@ -159,11 +154,13 @@ class OAuthRequest
     }
 
     /**
-     * Returns the base string of this request
+     * Возвращает базовую строку этого запроса.
      *
-     * The base string defined as the method, the url
-     * and the parameters (normalized), each urlencoded
-     * and the concated with &.
+     * Базовая строка определяется как метод, URL
+     * и параметры (нормализованные), каждый из которых закодирован в URL
+     * и объединены с помощью &.
+     *
+     * @return string Базовая строка запроса.
      */
     public function get_signature_base_string()
     {
@@ -179,7 +176,9 @@ class OAuthRequest
     }
 
     /**
-     * just uppercases the http method
+     * Просто преобразует HTTP-метод в верхний регистр.
+     *
+     * @return string HTTP-метод в верхнем регистре.
      */
     public function get_normalized_http_method()
     {
@@ -187,8 +186,10 @@ class OAuthRequest
     }
 
     /**
-     * parses the url and rebuilds it to be
+     * Разбирает URL и воссоздает его в формате
      * scheme://host/path
+     *
+     * @return string Нормализованный HTTP-URL.
      */
     public function get_normalized_http_url()
     {
@@ -206,7 +207,9 @@ class OAuthRequest
     }
 
     /**
-     * builds a url usable for a GET request
+     * Строит URL, который можно использовать для GET-запроса.
+     *
+     * @return string URL для GET-запроса.
      */
     public function to_url()
     {
@@ -219,7 +222,9 @@ class OAuthRequest
     }
 
     /**
-     * builds the data one would send in a POST request
+     * Строит данные, которые можно отправить в POST-запросе.
+     *
+     * @return string Данные для POST-запроса.
      */
     public function to_postdata()
     {
@@ -227,9 +232,10 @@ class OAuthRequest
     }
 
     /**
-     * builds the Authorization: header
-     * @param null $realm
-     * @return array
+     * Строит заголовок Authorization:.
+     *
+     * @param string|null $realm Область.
+     * @return array Заголовок авторизации.
      */
     public function to_header($realm = null)
     {
@@ -255,11 +261,13 @@ class OAuthRequest
 
         return array(
             'Authorization' => $out
-        ); //- hacked into this to make it return an array. 15/11/2014.
+        );
     }
 
     /**
-     * @return string
+     * Преобразование объекта в строку.
+     *
+     * @return string Строковое представление объекта OAuthRequest.
      */
     public function __toString()
     {
@@ -267,9 +275,11 @@ class OAuthRequest
     }
 
     /**
-     * @param $signature_method
-     * @param $consumer
-     * @param $token
+     * Подписывает запрос.
+     *
+     * @param OAuthSignatureMethod $signature_method Метод подписи OAuth.
+     * @param OAuthConsumer $consumer Потребитель OAuth.
+     * @param OAuthToken $token Токен OAuth.
      */
     public function sign_request($signature_method, $consumer, $token)
     {
@@ -279,19 +289,22 @@ class OAuthRequest
     }
 
     /**
-     * @param $signature_method
-     * @param $consumer
-     * @param $token
+     * Создает подпись.
      *
-     * @return mixed
+     * @param OAuthSignatureMethod $signature_method Метод подписи OAuth.
+     * @param OAuthConsumer $consumer Потребитель OAuth.
+     * @param OAuthToken $token Токен OAuth.
+     * @return mixed Подпись.
      */
-    public function build_signature($signature_method, $consumer, $token)
+    public function build_signature($signature_method, $consumer, $token): mixed
     {
         return $signature_method->build_signature($this, $consumer, $token);
     }
 
     /**
-     * util function: current timestamp
+     * Вспомогательная функция: текущая временная метка.
+     *
+     * @return int Текущая временная метка.
      */
     private static function generate_timestamp()
     {
@@ -299,7 +312,9 @@ class OAuthRequest
     }
 
     /**
-     * util function: current nonce
+     * Вспомогательная функция: текущий nonce.
+     *
+     * @return string Текущий nonce.
      */
     private static function generate_nonce()
     {

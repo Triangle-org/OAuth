@@ -24,7 +24,7 @@
  *              For any questions, please contact <creator@localzet.com>
  */
 
-namespace Triangle\OAuth\Thirdparty\OpenID;
+namespace Triangle\OAuth\Adapter\OpenID;
 
 
 use ErrorException;
@@ -32,14 +32,11 @@ use ErrorException;
 /**
  * This class provides a simple interface for OpenID 1.1/2.0 authentication.
  *
- * It requires PHP >= 5.1.2 with cURL or HTTP/HTTPS stream wrappers enabled.
+ * @author Ivan Zorin <creator@localzet.com>
+ * @author Ignat Ignatov <ignat.ignatov@leanplum.com>
  *
- * @version     v1.3.1 (2016-03-04)
- * @link        https://code.google.com/p/lightopenid/          Project URL
- * @link        https://github.com/iignatov/LightOpenID         GitHub Repo
- * @author      Mewp <mewp151 at gmail dot com>
- * @copyright   Copyright (c) 2013 Mewp
- * @license     http://opensource.org/licenses/mit-license.php  MIT License
+ * @link https://code.google.com/p/lightopenid Google Code
+ * @license http://opensource.org/licenses/mit-license.php MIT License
  */
 class LightOpenID
 {

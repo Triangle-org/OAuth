@@ -26,6 +26,8 @@
 
 namespace Triangle\OAuth\Storage;
 
+use Exception;
+
 /**
  * Triangle\OAuth storage manager
  */
@@ -36,24 +38,25 @@ class Session implements StorageInterface
      *
      * @var string
      */
-    protected $storeNamespace = 'OAuth::STORAGE';
+    protected string $namespace = 'OAuthStorage';
 
     /**
      * Key prefix
      *
      * @var string
      */
-    protected $keyPrefix = '';
+    protected string $prefix = '';
 
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
-    public function get($key)
+    public function get($key): mixed
     {
-        $key = $this->keyPrefix . strtolower($key);
+        $key = $this->prefix . strtolower($key);
 
-        if (session($this->storeNamespace) && session("$this->storeNamespace.$key")) {
-            $value = session("$this->storeNamespace.$key");
+        if (session()->get($this->namespace) && isset(session()->get($this->namespace)[$key])) {
+            $value = session()->get($this->namespace)[$key];
 
             if (is_array($value) && array_key_exists('lateObject', $value)) {
                 $value = unserialize($value['lateObject']);
@@ -67,65 +70,69 @@ class Session implements StorageInterface
 
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
-    public function set($key, $value)
+    public function set($key, $value): void
     {
-        $key = $this->keyPrefix . strtolower($key);
+        $key = $this->prefix . strtolower($key);
 
         if (is_object($value)) {
             // We encapsulate as our classes may be defined after session is initialized.
             $value = ['lateObject' => serialize($value)];
         }
 
-        $tmp = session($this->storeNamespace);
-        $tmp[$key] = $value;
-        session()->set($this->storeNamespace, $tmp);
+        $storage = session()->get($this->namespace);
+        $storage[$key] = $value;
+        session()->set($this->namespace, $storage);
         session()->save();
     }
 
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
-        session()->set($this->storeNamespace, []);
+        session()->set($this->namespace, []);
         session()->save();
     }
 
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
-    public function delete($key)
+    public function delete($key): void
     {
-        $key = $this->keyPrefix . strtolower($key);
+        $key = $this->prefix . strtolower($key);
 
-        if (session($this->storeNamespace) && session("$this->storeNamespace.$key")) {
-            $tmp = session($this->storeNamespace);
+        if (session()->get($this->namespace) && isset(session()->get($this->namespace)[$key])) {
+            $storage = session()->get($this->namespace);
 
-            unset($tmp[$key]);
+            unset($storage[$key]);
 
-            session()->set($this->storeNamespace, $tmp);
+            session()->set($this->namespace, $storage);
             session()->save();
         }
     }
 
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
-    public function deleteMatch($key)
+    public function deleteMatch($key): void
     {
-        $key = $this->keyPrefix . strtolower($key);
+        $key = $this->prefix . strtolower($key);
 
-        if (session($this->storeNamespace) && count(session($this->storeNamespace))) {
-            $tmp = session($this->storeNamespace);
+        if (session()->get($this->namespace) && count(session()->get($this->namespace))) {
+            $storage = session()->get($this->namespace);
 
-            foreach ($tmp as $k => $v) {
+            foreach ($storage as $k => $v) {
                 if (strstr($k, $key)) {
-                    unset($tmp[$k]);
+                    unset($storage[$k]);
                 }
             }
 
-            session()->set($this->storeNamespace, $tmp);
+            session()->set($this->namespace, $storage);
             session()->save();
         }
     }

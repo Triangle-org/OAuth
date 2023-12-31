@@ -26,6 +26,7 @@
 
 namespace Triangle\OAuth\Adapter;
 
+use AllowDynamicProperties;
 use InvalidArgumentException;
 use localzet\HTTP\Client as HttpClient;
 use Monolog\Logger;
@@ -41,7 +42,7 @@ use Triangle\OAuth\Storage\StorageInterface;
 /**
  * Class AbstractAdapter
  */
-abstract class AbstractAdapter implements AdapterInterface
+#[AllowDynamicProperties] abstract class AbstractAdapter implements AdapterInterface
 {
     use DataStoreTrait;
 
@@ -50,28 +51,28 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @var string
      */
-    protected $providerId = '';
+    protected string $providerId = '';
 
     /**
      * Specific Provider config.
      *
      * @var mixed
      */
-    protected $config = [];
+    protected mixed $config = [];
 
     /**
      * Extra Provider parameters.
      *
      * @var array
      */
-    protected $params;
+    protected array $params;
 
     /**
      * Callback url
      *
      * @var string
      */
-    protected $callback = '';
+    protected string $callback = '';
 
     /**
      * Storage.
@@ -99,7 +100,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @var bool
      */
-    protected $validateApiResponseHttpCode = true;
+    protected bool $validateApiResponseHttpCode = true;
 
     /**
      * Common adapters constructor.
@@ -110,10 +111,10 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param Logger|null $logger
      */
     public function __construct(
-        $config = [],
-        HttpClient $httpClient = null,
+        array            $config = [],
+        HttpClient       $httpClient = null,
         StorageInterface $storage = null,
-        Logger $logger = null
+        Logger           $logger = null
     )
     {
         $this->providerId = (new ReflectionClass($this))->getShortName();

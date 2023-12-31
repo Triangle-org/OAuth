@@ -24,25 +24,42 @@
  *              For any questions, please contact <creator@localzet.com>
  */
 
-namespace Triangle\OAuth\Thirdparty\OAuth;
+namespace Triangle\OAuth\Adapter\OAuth1;
 
 /**
- * Class OAuthConsumer
+ * Класс OAuthConsumer
  *
- * @package Triangle\OAuth\Thirdparty\OAuth
+ * Этот класс представляет собой потребителя OAuth, который содержит ключ, секрет и URL обратного вызова.
+ *
+ * @author Ivan Zorin
+ * @author Andy Smith
+ *
+ * @link https://code.google.com/archive/p/oauth
+ * @license http://opensource.org/licenses/mit-license.php MIT License
  */
 class OAuthConsumer
 {
+    /**
+     * @var string $key Ключ потребителя OAuth.
+     */
     public $key;
+
+    /**
+     * @var string $secret Секрет потребителя OAuth.
+     */
     public $secret;
+
+    /**
+     * @var string|null $callback_url URL обратного вызова OAuth.
+     */
     public $callback_url;
 
     /**
-     * OAuthConsumer constructor.
+     * Конструктор OAuthConsumer.
      *
-     * @param      $key
-     * @param      $secret
-     * @param null $callback_url
+     * @param string $key Ключ потребителя OAuth.
+     * @param string $secret Секрет потребителя OAuth.
+     * @param string|null $callback_url URL обратного вызова OAuth (необязательно).
      */
     public function __construct($key, $secret, $callback_url = null)
     {
@@ -52,7 +69,9 @@ class OAuthConsumer
     }
 
     /**
-     * @return string
+     * Преобразование объекта в строку.
+     *
+     * @return string Строковое представление объекта OAuthConsumer.
      */
     public function __toString()
     {

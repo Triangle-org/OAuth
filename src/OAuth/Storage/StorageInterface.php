@@ -32,13 +32,13 @@ namespace Triangle\OAuth\Storage;
 interface StorageInterface
 {
     /**
-     * Retrieve a item from storage
+     * Retrieve an item from storage
      *
      * @param string $key
      *
      * @return mixed
      */
-    public function get($key);
+    public function get($key): mixed;
 
     /**
      * Add or Update an item to storage

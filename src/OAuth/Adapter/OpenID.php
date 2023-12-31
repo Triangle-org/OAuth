@@ -33,7 +33,7 @@ use Triangle\Engine\Exception\AuthorizationDeniedException;
 use Triangle\Engine\Exception\InvalidOpenidIdentifierException;
 use Triangle\Engine\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Model\Profile;
-use Triangle\OAuth\Thirdparty\OpenID\LightOpenID;
+use Triangle\OAuth\Adapter\OpenID\LightOpenID;
 
 
 /**

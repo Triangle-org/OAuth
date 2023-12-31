@@ -24,25 +24,32 @@
  *              For any questions, please contact <creator@localzet.com>
  */
 
-namespace Triangle\OAuth\Thirdparty\OAuth;
+namespace Triangle\OAuth\Adapter\OAuth1;
 
 /**
- * Class OAuthUtil
+ * Класс OAuthUtil
  *
- * @package LIlocalzet\OAuthS\Thirdparty\OAuth
+ * Этот класс содержит утилиты для работы с OAuth.
+ *
+ * @author Ivan Zorin
+ * @author Andy Smith
+ *
+ * @link https://code.google.com/archive/p/oauth
+ * @license http://opensource.org/licenses/mit-license.php MIT License
  */
 class OAuthUtil
 {
     /**
-     * @param $input
+     * Кодирует входные данные в соответствии с RFC3986.
      *
-     * @return array|string
+     * @param mixed $input Входные данные для кодирования.
+     * @return array|string Кодированные входные данные.
      */
-    public static function urlencode_rfc3986($input)
+    public static function urlencode_rfc3986(mixed $input): array|string
     {
         if (is_array($input)) {
             return array_map(array(
-                '\Triangle\OAuth\Thirdparty\OAuth\OAuthUtil',
+                '\Triangle\OAuth\Adapter\OAuth1\OAuthUtil',
                 'urlencode_rfc3986'
             ), $input);
         } elseif (is_scalar($input)) {
@@ -52,53 +59,24 @@ class OAuthUtil
         }
     }
 
-    // This decode function isn't taking into consideration the above
-    // modifications to the encoding process. However, this method doesn't
-    // seem to be used anywhere so leaving it as is.
     /**
-     * @param $string
+     * Декодирует строку в соответствии с RFC3986.
      *
-     * @return string
+     * @param string $string Строка для декодирования.
+     * @return string Декодированная строка.
      */
-    public static function urldecode_rfc3986($string)
+    public static function urldecode_rfc3986(string $string): string
     {
         return urldecode($string);
     }
 
-    // Utility function for turning the Authorization: header into
-    // parameters, has to do some unescaping
-    // Can filter out any non-oauth parameters if needed (default behaviour)
-    // May 28th, 2010 - method updated to tjerk.meesters for a speed improvement.
-    // see http://code.google.com/p/oauth/issues/detail?id=163
     /**
-     * @param      $header
-     * @param bool $only_allow_oauth_parameters
+     * Разбирает параметры из строки запроса.
      *
-     * @return array
+     * @param string $input Строка запроса.
+     * @return array Массив параметров.
      */
-    public static function split_header($header, $only_allow_oauth_parameters = true)
-    {
-        $params = array();
-        if (preg_match_all('/(' . ($only_allow_oauth_parameters ? 'oauth_' : '') . '[a-z_-]*)=(:?"([^"]*)"|([^,]*))/', $header, $matches)) {
-            foreach ($matches[1] as $i => $h) {
-                $params[$h] = OAuthUtil::urldecode_rfc3986(empty($matches[3][$i]) ? $matches[4][$i] : $matches[3][$i]);
-            }
-            if (isset($params['realm'])) {
-                unset($params['realm']);
-            }
-        }
-        return $params;
-    }
-
-    // This function takes a input like a=b&a=c&d=e and returns the parsed
-    // parameters like this
-    // array('a' => array('b','c'), 'd' => 'e')
-    /**
-     * @param $input
-     *
-     * @return array
-     */
-    public static function parse_parameters($input)
+    public static function parse_parameters(string $input): array
     {
         if (!isset($input) || !$input) {
             return array();
@@ -113,12 +91,7 @@ class OAuthUtil
             $value = isset($split[1]) ? OAuthUtil::urldecode_rfc3986($split[1]) : '';
 
             if (isset($parsed_parameters[$parameter])) {
-                // We have already recieved parameter(s) with this name, so add to the list
-                // of parameters with this name
-
                 if (is_scalar($parsed_parameters[$parameter])) {
-                    // This is the first duplicate, so transform scalar (string) into an array
-                    // so we can add the duplicates
                     $parsed_parameters[$parameter] = array(
                         $parsed_parameters[$parameter]
                     );
@@ -133,31 +106,26 @@ class OAuthUtil
     }
 
     /**
-     * @param $params
+     * Строит HTTP-запрос из массива параметров.
      *
-     * @return string
+     * @param array $params Массив параметров.
+     * @return string Строка HTTP-запроса.
      */
-    public static function build_http_query($params)
+    public static function build_http_query(array $params): string
     {
         if (!$params) {
             return '';
         }
 
-        // Urlencode both keys and values
         $keys = OAuthUtil::urlencode_rfc3986(array_keys($params));
         $values = OAuthUtil::urlencode_rfc3986(array_values($params));
         $params = array_combine($keys, $values);
 
-        // Parameters are sorted by name, using lexicographical byte value ordering.
-        // Ref: Spec: 9.1.1 (1)
         uksort($params, 'strcmp');
 
         $pairs = array();
         foreach ($params as $parameter => $value) {
             if (is_array($value)) {
-                // If two or more parameters share the same name, they are sorted by their value
-                // Ref: Spec: 9.1.1 (1)
-                // June 12th, 2010 - changed to sort because of issue 164 by hidetaka
                 sort($value, SORT_STRING);
                 foreach ($value as $duplicate_value) {
                     $pairs[] = $parameter . '=' . $duplicate_value;
@@ -166,8 +134,6 @@ class OAuthUtil
                 $pairs[] = $parameter . '=' . $value;
             }
         }
-        // For each parameter, the name is separated from the corresponding value by an '=' character (ASCII code 61)
-        // Each name-value pair is separated by an '&' character (ASCII code 38)
         return implode('&', $pairs);
     }
 }
