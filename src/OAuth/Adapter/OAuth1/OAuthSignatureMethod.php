@@ -83,7 +83,7 @@ abstract class OAuthSignatureMethod
         // Избегаем утечки времени с (надеемся) нечувствительным к времени сравнением
         $result = 0;
         for ($i = 0; $i < strlen($signature); $i++) {
-            $result |= ord($built{$i}) ^ ord($signature{$i});
+            $result |= ord($built[$i]) ^ ord($signature[$i]);
         }
 
         return $result == 0;

@@ -37,7 +37,8 @@ namespace Triangle\OAuth\Adapter\OAuth1;
  * @link https://code.google.com/archive/p/oauth
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class OAuthToken {
+class OAuthToken
+{
     /**
      * @var string $key Ключ токена OAuth.
      */
@@ -54,7 +55,8 @@ class OAuthToken {
      * @param string $key Ключ токена OAuth.
      * @param string $secret Секрет токена OAuth.
      */
-    function __construct(string $key, string $secret) {
+    function __construct(string $key, string $secret)
+    {
         $this->key = $key;
         $this->secret = $secret;
     }
@@ -78,7 +80,8 @@ class OAuthToken {
      *
      * @return string Строковое представление объекта OAuthToken.
      */
-    function __toString() {
+    function __toString()
+    {
         return $this->to_string();
     }
 }
