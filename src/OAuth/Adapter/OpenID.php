@@ -29,9 +29,9 @@ namespace Triangle\OAuth\Adapter;
 use ErrorException;
 use InvalidArgumentException;
 use Support\Collection;
-use Triangle\Engine\Exception\AuthorizationDeniedException;
-use Triangle\Engine\Exception\InvalidOpenidIdentifierException;
-use Triangle\Engine\Exception\UnexpectedApiResponseException;
+use Triangle\Exception\AuthorizationDeniedException;
+use Triangle\Exception\InvalidOpenidIdentifierException;
+use Triangle\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Adapter\OpenID\LightOpenID;
 use Triangle\OAuth\Model\Profile;
 

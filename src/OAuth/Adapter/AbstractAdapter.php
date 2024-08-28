@@ -33,16 +33,17 @@ use Monolog\Logger;
 use ReflectionClass;
 use Support\Collection;
 use support\Log;
-use Triangle\Engine\Exception\HttpClientFailureException;
-use Triangle\Engine\Exception\HttpRequestFailedException;
-use Triangle\Engine\Exception\NotImplementedException;
+use Triangle\Exception\HttpClientFailureException;
+use Triangle\Exception\HttpRequestFailedException;
+use Triangle\Exception\NotImplementedException;
 use Triangle\OAuth\Storage\Session;
 use Triangle\OAuth\Storage\StorageInterface;
 
 /**
  * Class AbstractAdapter
  */
-#[AllowDynamicProperties] abstract class AbstractAdapter implements AdapterInterface
+#[AllowDynamicProperties]
+abstract class AbstractAdapter implements AdapterInterface
 {
     use DataStoreTrait;
 

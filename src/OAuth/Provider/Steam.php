@@ -29,7 +29,7 @@ namespace Triangle\OAuth\Provider;
 use Exception;
 use SimpleXMLElement;
 use Support\Collection;
-use Triangle\Engine\Exception\UnexpectedApiResponseException;
+use Triangle\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Adapter\OpenID;
 
 /**
@@ -117,7 +117,7 @@ class Steam extends OpenID
         $q = http_build_query(['key' => $apiKey, 'steamids' => $steam64]);
         $apiUrl = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?' . $q;
 
-        $response = $this->httpClient->request($apiUrl);
+        $response = (string)$this->httpClient->request($apiUrl);
 
         $data = json_decode($response);
 
@@ -148,7 +148,7 @@ class Steam extends OpenID
 
         $apiUrl = 'http://steamcommunity.com/profiles/' . $steam64 . '/?xml=1';
 
-        $response = $this->httpClient->request($apiUrl);
+        $response = (string)$this->httpClient->request($apiUrl);
 
         $data = new SimpleXMLElement($response);
 

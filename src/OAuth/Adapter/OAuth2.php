@@ -29,13 +29,13 @@ namespace Triangle\OAuth\Adapter;
 use Exception;
 use InvalidArgumentException;
 use Support\Collection;
-use Triangle\Engine\Exception\AuthorizationDeniedException;
-use Triangle\Engine\Exception\HttpClientFailureException;
-use Triangle\Engine\Exception\HttpRequestFailedException;
-use Triangle\Engine\Exception\InvalidAccessTokenException;
-use Triangle\Engine\Exception\InvalidApplicationCredentialsException;
-use Triangle\Engine\Exception\InvalidAuthorizationCodeException;
-use Triangle\Engine\Exception\InvalidAuthorizationStateException;
+use Triangle\Exception\AuthorizationDeniedException;
+use Triangle\Exception\HttpClientFailureException;
+use Triangle\Exception\HttpRequestFailedException;
+use Triangle\Exception\InvalidAccessTokenException;
+use Triangle\Exception\InvalidApplicationCredentialsException;
+use Triangle\Exception\InvalidAuthorizationCodeException;
+use Triangle\Exception\InvalidAuthorizationStateException;
 
 /**
  * This class  can be used to simplify the authorization flow of OAuth 2 based service providers.
@@ -539,7 +539,7 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
     {
         $this->tokenExchangeParameters['code'] = $code;
 
-        $response = $this->httpClient->request(
+        $response = (string)$this->httpClient->request(
             $this->accessTokenUrl,
             $this->tokenExchangeMethod,
             $this->tokenExchangeParameters,
@@ -651,7 +651,7 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
             return null;
         }
 
-        $response = $this->httpClient->request(
+        $response = (string)$this->httpClient->request(
             $this->accessTokenUrl,
             $this->tokenRefreshMethod,
             $this->tokenRefreshParameters,
@@ -750,12 +750,11 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
         $parameters = array_replace($this->apiRequestParameters, (array)$parameters);
         $headers = array_replace($this->apiRequestHeaders, (array)$headers);
 
-        $response = $this->httpClient->request(
+        $response = (string)$this->httpClient->request(
             $url,
             $method,     // HTTP Request Method. Defaults to GET.
             $parameters, // Request Parameters
             $headers,    // Request Headers
-            $multipart   // Is request multipart
         );
 
         $this->validateApiResponse('Signed API request to ' . $url . ' has returned an error');

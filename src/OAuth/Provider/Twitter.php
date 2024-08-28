@@ -28,9 +28,9 @@ namespace Triangle\OAuth\Provider;
 
 use Exception;
 use Support\Collection;
-use Triangle\Engine\Exception\HttpClientFailureException;
-use Triangle\Engine\Exception\HttpRequestFailedException;
-use Triangle\Engine\Exception\UnexpectedApiResponseException;
+use Triangle\Exception\HttpClientFailureException;
+use Triangle\Exception\HttpRequestFailedException;
+use Triangle\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Adapter\OAuth1;
 use Triangle\OAuth\Model\Activity;
 use Triangle\OAuth\Model\Contact;

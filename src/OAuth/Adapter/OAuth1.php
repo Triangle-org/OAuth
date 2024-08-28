@@ -29,12 +29,12 @@ namespace Triangle\OAuth\Adapter;
 use Exception;
 use InvalidArgumentException;
 use Support\Collection;
-use Triangle\Engine\Exception\AuthorizationDeniedException;
-use Triangle\Engine\Exception\HttpClientFailureException;
-use Triangle\Engine\Exception\HttpRequestFailedException;
-use Triangle\Engine\Exception\InvalidAccessTokenException;
-use Triangle\Engine\Exception\InvalidApplicationCredentialsException;
-use Triangle\Engine\Exception\InvalidOauthTokenException;
+use Triangle\Exception\AuthorizationDeniedException;
+use Triangle\Exception\HttpClientFailureException;
+use Triangle\Exception\HttpRequestFailedException;
+use Triangle\Exception\InvalidAccessTokenException;
+use Triangle\Exception\InvalidApplicationCredentialsException;
+use Triangle\Exception\InvalidOauthTokenException;
 use Triangle\OAuth\Adapter\OAuth1\OAuthConsumer;
 use Triangle\OAuth\Adapter\OAuth1\OAuthRequest;
 use Triangle\OAuth\Adapter\OAuth1\OAuthSignatureMethod;
@@ -623,12 +623,11 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
         $uri = $request->get_normalized_http_url();
         $headers = array_replace($request->to_header(), (array)$headers);
 
-        $response = $this->httpClient->request(
+        $response = (string)$this->httpClient->request(
             $uri,
             $method,
             $parameters,
-            $headers,
-            $multipart
+            $headers
         );
 
         $this->validateApiResponse('Signed API request to ' . $uri . ' has returned an error');

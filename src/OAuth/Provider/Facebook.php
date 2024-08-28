@@ -28,11 +28,11 @@ namespace Triangle\OAuth\Provider;
 
 use InvalidArgumentException;
 use Support\Collection;
-use Triangle\Engine\Exception\HttpClientFailureException;
-use Triangle\Engine\Exception\HttpRequestFailedException;
-use Triangle\Engine\Exception\InvalidAccessTokenException;
-use Triangle\Engine\Exception\NotImplementedException;
-use Triangle\Engine\Exception\UnexpectedApiResponseException;
+use Triangle\Exception\HttpClientFailureException;
+use Triangle\Exception\HttpRequestFailedException;
+use Triangle\Exception\InvalidAccessTokenException;
+use Triangle\Exception\NotImplementedException;
+use Triangle\Exception\UnexpectedApiResponseException;
 use Triangle\OAuth\Adapter\OAuth2;
 use Triangle\OAuth\Model\Activity;
 use Triangle\OAuth\Model\Contact;
@@ -150,7 +150,7 @@ class Facebook extends OAuth2
             'fb_exchange_token' => $this->getStoredData('access_token'),
         ];
 
-        $response = $this->httpClient->request(
+        $response = (string)$this->httpClient->request(
             $this->accessTokenUrl,
             'GET',
             $exchangeTokenParameters
