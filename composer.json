@@ -40,10 +40,8 @@
     "ext-mbstring": "*",
     "ext-json": "*",
     "ext-curl": "*",
-    "localzet/http": "^2.0"
-  },
-  "require-dev": {
-    "triangle/http": "^1.0"
+    "localzet/http": "^2.0",
+    "triangle/engine": "^8.1"
   },
   "suggest": {
     "ext-libxml": "Требуется для провайдера Steam",

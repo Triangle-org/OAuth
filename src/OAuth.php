@@ -32,7 +32,7 @@ use localzet\HTTP\Client as HttpClient;
 use Monolog\Logger;
 use SplFileInfo;
 use support\Log;
-use Triangle\Http\Response;
+use Triangle\Engine\Response;
 use Triangle\OAuth\Adapter\AdapterInterface;
 use Triangle\OAuth\Storage\StorageInterface;
 use UnexpectedValueException;
