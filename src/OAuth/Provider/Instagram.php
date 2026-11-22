@@ -150,14 +150,15 @@ class Instagram extends OAuth2
             $url = 'https://graph.instagram.com/access_token';
         }
 
-        $response = (string)$this->httpClient->request(
+        $response = $this->requestHttpResponse(
             $url,
             'GET',
-            $exchangeTokenParameters
+            $exchangeTokenParameters,
+            [],
+            'Unable to exchange the access token'
         );
 
-        $this->validateApiResponse('Unable to exchange the access token');
-
+        $response = (string)$response;
         $this->validateAccessTokenExchange($response);
 
         return $response;

@@ -269,8 +269,9 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
      */
     protected function configure()
     {
-        $this->clientId = $this->config->filter('keys')->get('id') ?: $this->config->filter('keys')->get('key');
-        $this->clientSecret = $this->config->filter('keys')->get('secret');
+        $keys = $this->getCredentialConfig();
+        $this->clientId = $keys->get('id') ?: $keys->get('key');
+        $this->clientSecret = $keys->get('secret');
 
         if (!$this->clientId || !$this->clientSecret) {
             throw new InvalidApplicationCredentialsException(
@@ -417,7 +418,7 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
 
         $this->logger->debug(sprintf('%s::authenticateBegin(), redirecting user to:', get_class($this)), [$authUrl]);
 
-        return redirect($authUrl);
+        return triangle_redirect($authUrl);
     }
 
     /**
@@ -539,16 +540,15 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
     {
         $this->tokenExchangeParameters['code'] = $code;
 
-        $response = (string)$this->httpClient->request(
+        $response = $this->requestHttpResponse(
             $this->accessTokenUrl,
             $this->tokenExchangeMethod,
             $this->tokenExchangeParameters,
-            $this->tokenExchangeHeaders
+            $this->tokenExchangeHeaders,
+            'Unable to exchange code for API access token'
         );
 
-        $this->validateApiResponse('Unable to exchange code for API access token');
-
-        return $response;
+        return (string)$response;
     }
 
     /**
@@ -651,14 +651,15 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
             return null;
         }
 
-        $response = (string)$this->httpClient->request(
+        $httpResponse = $this->requestHttpResponse(
             $this->accessTokenUrl,
             $this->tokenRefreshMethod,
             $this->tokenRefreshParameters,
-            $this->tokenRefreshHeaders
+            $this->tokenRefreshHeaders,
+            'Unable to refresh the access token'
         );
 
-        $this->validateApiResponse('Unable to refresh the access token');
+        $response = (string)$httpResponse;
 
         $this->validateRefreshAccessToken($response);
 
@@ -750,15 +751,14 @@ abstract class OAuth2 extends AbstractAdapter implements AdapterInterface
         $parameters = array_replace($this->apiRequestParameters, (array)$parameters);
         $headers = array_replace($this->apiRequestHeaders, (array)$headers);
 
-        $response = (string)$this->httpClient->request(
+        $response = $this->requestHttpResponse(
             $url,
             $method,     // HTTP Request Method. Defaults to GET.
             $parameters, // Request Parameters
             $headers,    // Request Headers
+            'Signed API request to ' . $url . ' has returned an error'
         );
 
-        $this->validateApiResponse('Signed API request to ' . $url . ' has returned an error');
-
-        return parse($response);
+        return parse((string)$response);
     }
 }

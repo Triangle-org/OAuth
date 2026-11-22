@@ -84,6 +84,6 @@ class PaypalOpenID extends OpenID
             'company/title',
         ];
 
-        return redirect($this->openIdClient->authUrl());
+        return triangle_redirect($this->openIdClient->authUrl());
     }
 }

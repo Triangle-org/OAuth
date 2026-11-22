@@ -269,7 +269,8 @@ class Apple extends OAuth2
     private function getSecret()
     {
         // Your 10-character Team ID
-        $team_id = $this->config->filter('keys')->get('team_id');
+        $keys = $this->getCredentialConfig();
+        $team_id = $keys->get('team_id');
 
         if (!$team_id) {
             throw new InvalidApplicationCredentialsException(
@@ -278,7 +279,7 @@ class Apple extends OAuth2
         }
 
         // Your Services ID, e.g. com.aaronparecki.services
-        $client_id = $this->config->filter('keys')->get('id') ?: $this->config->filter('keys')->get('key');
+        $client_id = $keys->get('id') ?: $keys->get('key');
 
         if (!$client_id) {
             throw new InvalidApplicationCredentialsException(
@@ -287,7 +288,7 @@ class Apple extends OAuth2
         }
 
         // Find the 10-char Key ID value from the portal
-        $key_id = $this->config->filter('keys')->get('key_id');
+        $key_id = $keys->get('key_id');
 
         if (!$key_id) {
             throw new InvalidApplicationCredentialsException(
@@ -296,11 +297,11 @@ class Apple extends OAuth2
         }
 
         // Find the 10-char Key ID value from the portal
-        $key_content = $this->config->filter('keys')->get('key_content');
+        $key_content = $keys->get('key_content');
 
         // Save your private key from Apple in a file called `key.txt`
         if (!$key_content) {
-            $key_file = $this->config->filter('keys')->get('key_file');
+            $key_file = $keys->get('key_file');
 
             if (!$key_file) {
                 throw new InvalidApplicationCredentialsException(
