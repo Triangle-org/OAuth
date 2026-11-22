@@ -172,8 +172,9 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
      */
     protected function configure()
     {
-        $this->consumerKey = $this->config->filter('keys')->get('id') ?: $this->config->filter('keys')->get('key');
-        $this->consumerSecret = $this->config->filter('keys')->get('secret');
+        $keys = $this->getCredentialConfig();
+        $this->consumerKey = $keys->get('id') ?: $keys->get('key');
+        $this->consumerSecret = $keys->get('secret');
 
         if (!$this->consumerKey || !$this->consumerSecret) {
             throw new InvalidApplicationCredentialsException(
@@ -287,7 +288,7 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
 
         $this->logger->debug(sprintf('%s::authenticateBegin(), redirecting user to:', get_class($this)), [$authUrl]);
 
-        return redirect($authUrl);
+        return triangle_redirect($authUrl);
     }
 
     /**
@@ -623,15 +624,14 @@ abstract class OAuth1 extends AbstractAdapter implements AdapterInterface
         $uri = $request->get_normalized_http_url();
         $headers = array_replace($request->to_header(), (array)$headers);
 
-        $response = (string)$this->httpClient->request(
+        $response = $this->requestHttpResponse(
             $uri,
             $method,
             $parameters,
-            $headers
+            $headers,
+            'Signed API request to ' . $uri . ' has returned an error'
         );
 
-        $this->validateApiResponse('Signed API request to ' . $uri . ' has returned an error');
-
-        return $response;
+        return (string)$response;
     }
 }

@@ -150,14 +150,15 @@ class Facebook extends OAuth2
             'fb_exchange_token' => $this->getStoredData('access_token'),
         ];
 
-        $response = (string)$this->httpClient->request(
+        $response = $this->requestHttpResponse(
             $this->accessTokenUrl,
             'GET',
-            $exchangeTokenParameters
+            $exchangeTokenParameters,
+            [],
+            'Unable to exchange the access token'
         );
 
-        $this->validateApiResponse('Unable to exchange the access token');
-
+        $response = (string)$response;
         $this->validateAccessTokenExchange($response);
 
         return $response;

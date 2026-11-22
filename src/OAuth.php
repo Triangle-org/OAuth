@@ -170,7 +170,9 @@ class OAuth
             }
         }
 
-        return new $adapter($config, $this->httpClient, $this->storage, $this->logger);
+        $httpClient = array_key_exists('http_client_options', $config) ? null : $this->httpClient;
+
+        return new $adapter($config, $httpClient, $this->storage, $this->logger);
     }
 
     /**

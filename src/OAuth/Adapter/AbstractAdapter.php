@@ -30,6 +30,7 @@ use AllowDynamicProperties;
 use InvalidArgumentException;
 use localzet\HTTP\Client as HttpClient;
 use Monolog\Logger;
+use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
 use Support\Collection;
 use support\Log;
@@ -38,6 +39,7 @@ use Triangle\Exception\HttpRequestFailedException;
 use Triangle\Exception\NotImplementedException;
 use Triangle\OAuth\Storage\Session;
 use Triangle\OAuth\Storage\StorageInterface;
+use Throwable;
 
 /**
  * Class AbstractAdapter
@@ -274,12 +276,62 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function setHttpClient(HttpClient $httpClient = null)
     {
-
-        $this->httpClient = $httpClient ?: new HttpClient();
-
-        if ($this->config->exists('curl_options') && method_exists($this->httpClient, 'setCurlOptions')) {
-            $this->httpClient->setCurlOptions($this->config->get('curl_options'));
+        if ($this->config->exists('curl_options')) {
+            throw new InvalidArgumentException(
+                'The curl_options setting is no longer supported by localzet/http v3; use http_client_options.'
+            );
         }
+
+        $options = [];
+        if ($this->config->exists('http_client_options')) {
+            $options = $this->config->get('http_client_options');
+            if (!is_array($options)) {
+                throw new InvalidArgumentException('http_client_options must be an array.');
+            }
+        }
+
+        $this->httpClient = $httpClient ?? new HttpClient($options);
+    }
+
+    protected function getCredentialConfig(): Collection
+    {
+        return new Collection($this->config->get('keys'));
+    }
+
+    protected function requestHttpResponse(
+        string $url,
+        string $method,
+        array $parameters,
+        array $headers,
+        string $error
+    ): ResponseInterface {
+        try {
+            $response = $this->httpClient->request($url, $method, $parameters, $headers);
+        } catch (Throwable $exception) {
+            throw new HttpClientFailureException(
+                $error . '. HTTP client request failed: ' . $exception->getMessage(),
+                0,
+                $exception,
+            );
+        }
+
+        if (!$response instanceof ResponseInterface) {
+            throw new HttpClientFailureException($error . '. HTTP client returned no response.');
+        }
+
+        if (!$this->validateApiResponseHttpCode) {
+            return $response;
+        }
+
+        $status = $response->getStatusCode();
+        if ($status < 200 || $status > 299) {
+            throw new HttpRequestFailedException(
+                $error . '. HTTP-ошибка ' . $status . '. Raw Provider API response: '
+                . (string)$response->getBody() . '.'
+            );
+        }
+
+        return $response;
     }
 
     /**
@@ -358,42 +410,5 @@ abstract class AbstractAdapter implements AdapterInterface
         $this->apiBaseUrl = $collection->get('api_base_url') ?: $this->apiBaseUrl;
         $this->authorizeUrl = $collection->get('authorize_url') ?: $this->authorizeUrl;
         $this->accessTokenUrl = $collection->get('access_token_url') ?: $this->accessTokenUrl;
-    }
-
-
-    /**
-     * Validate signed API responses Http status code.
-     *
-     * Since the specifics of error responses is beyond the scope of RFC6749 and OAuth Core specifications,
-     * Triangle\OAuth will consider any HTTP status code that is different than '200 OK' as an ERROR.
-     *
-     * @param string $error String to pre append to message thrown in exception
-     *
-     * @throws HttpClientFailureException
-     * @throws HttpRequestFailedException
-     */
-    protected function validateApiResponse($error = '')
-    {
-        $error .= !empty($error) ? '. ' : '';
-
-        if ($this->httpClient->getResponseClientError()) {
-            throw new HttpClientFailureException(
-                $error . 'HTTP Client Error.: ' . $this->httpClient->getResponseClientError() . '.'
-            );
-        }
-
-        // if validateApiResponseHttpCode is set to false, we by pass verification of http status code
-        if (!$this->validateApiResponseHttpCode) {
-            return;
-        }
-
-        $status = $this->httpClient->getResponseHttpCode();
-
-        if ($status < 200 || $status > 299) {
-            throw new HttpRequestFailedException(
-                $error . 'HTTP-ошибка ' . $this->httpClient->getResponseHttpCode() .
-                '. Raw Provider API response: ' . $this->httpClient->getResponseBody() . '.'
-            );
-        }
     }
 }

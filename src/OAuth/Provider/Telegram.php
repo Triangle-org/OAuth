@@ -89,8 +89,9 @@ class Telegram extends AbstractAdapter implements AdapterInterface
      */
     protected function configure()
     {
-        $this->botId = $this->config->filter('keys')->get('id');
-        $this->botSecret = $this->config->filter('keys')->get('secret');
+        $keys = $this->getCredentialConfig();
+        $this->botId = $keys->get('id');
+        $this->botSecret = $keys->get('secret');
         $this->callbackUrl = $this->config->get('callback');
 
         if (!$this->botId || !$this->botSecret) {
@@ -209,7 +210,7 @@ class Telegram extends AbstractAdapter implements AdapterInterface
         $nonce = $this->config->get('nonce');
         $nonce_code = empty($nonce) ? '' : "nonce=\"{$nonce}\"";
 
-        return response(
+        return triangle_response(
             <<<HTML
             <center>
                 <script async src="https://telegram.org/js/telegram-widget.js?7"

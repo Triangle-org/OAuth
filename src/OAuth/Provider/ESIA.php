@@ -59,7 +59,8 @@ class ESIA extends OAuth2
         );
 
 
-        $this->clientId = $this->config->filter('keys')->get('id');
+        $keys = $this->getCredentialConfig();
+        $this->clientId = $keys->get('id');
         $this->clientSecret = $this->signature($this->scope . $this->timestamp . $this->clientId . $this->state);
 
         if (!$this->clientId || !$this->clientSecret) {
@@ -87,13 +88,14 @@ class ESIA extends OAuth2
                 set_error_handler(function (int $errno, string $errstr) {
                     throw new RuntimeException("Не могу прочитать сертификат ($errno): $errstr");
                 });
-                $cert = openssl_x509_read(file_get_contents($this->config->filter('keys')->get('cert')));
+                $cert = openssl_x509_read(file_get_contents($this->getCredentialConfig()->get('cert')));
             } finally {
                 restore_error_handler();
                 if (!is_resource($cert)) throw new RuntimeException(openssl_error_string());
             }
 
-            $privateKey = openssl_pkey_get_private(file_get_contents($this->config->filter('keys')->get('key')), $this->config->filter('keys')->get('key_pass'));
+            $keys = $this->getCredentialConfig();
+            $privateKey = openssl_pkey_get_private(file_get_contents($keys->get('key')), $keys->get('key_pass'));
             if (!is_resource($privateKey)) {
                 throw new RuntimeException("Не могу прочитать приватный ключ");
             }

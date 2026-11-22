@@ -173,7 +173,7 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
 
         $this->logger->debug(sprintf('%s::authenticateBegin(), redirecting user to:', get_class($this)), [$authUrl]);
 
-        return redirect($authUrl);
+        return triangle_redirect($authUrl);
     }
 
     /**

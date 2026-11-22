@@ -83,7 +83,7 @@ class Steam extends OpenID
         }
 
         try {
-            $apiKey = $this->config->filter('keys')->get('secret');
+            $apiKey = $this->getCredentialConfig()->get('secret');
 
             // if api key is provided, we attempt to use steam web api
             if ($apiKey) {
