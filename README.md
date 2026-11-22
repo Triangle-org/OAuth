@@ -55,9 +55,13 @@ if ($result instanceof \Triangle\Engine\Response) {
 $profile = $result->getUserProfile();
 ```
 
+Если передать HTTP-клиент явно через конструктор адаптера или `setHttpClient()`, будет использован именно он; `http_client_options` применяется, когда адаптер создаёт клиент самостоятельно.
+
 `authenticate()` returns an Engine response while starting authorization and the provider adapter after authentication. Keep client secrets in environment configuration. Provider-specific options and examples are in the [Triangle OAuth documentation](https://docs.localzet.com/triangle/oauth).
 
 For HTTP client settings, use the provider option `http_client_options` supported by Localzet HTTP Client 3, for example `['timeout' => 10]` or a TLS `context`. The old `curl_options` setting is unsupported by HTTP Client 3.
+
+An HTTP client passed explicitly to an adapter constructor or `setHttpClient()` is used as-is. `http_client_options` applies when the adapter creates its own client.
 
 ## Compatibility
 

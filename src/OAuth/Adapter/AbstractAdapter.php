@@ -282,17 +282,15 @@ abstract class AbstractAdapter implements AdapterInterface
             );
         }
 
+        $options = [];
         if ($this->config->exists('http_client_options')) {
             $options = $this->config->get('http_client_options');
             if (!is_array($options)) {
                 throw new InvalidArgumentException('http_client_options must be an array.');
             }
-
-            $this->httpClient = new HttpClient($options);
-            return;
         }
 
-        $this->httpClient = $httpClient ?: new HttpClient();
+        $this->httpClient = $httpClient ?? new HttpClient($options);
     }
 
     protected function getCredentialConfig(): Collection

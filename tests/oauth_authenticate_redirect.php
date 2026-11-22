@@ -128,3 +128,42 @@ try {
 }
 
 echo "OAuth API response validation passed.\n";
+
+$providerOptionsOAuth = new OAuth(
+    [
+        'providers' => [
+            'google' => [
+                'enabled' => true,
+                'callback' => 'https://app.example.test/oauth/callback',
+                'keys' => ['id' => 'test-client', 'secret' => 'test-secret'],
+                'http_client_options' => ['timeout' => 5],
+            ],
+        ],
+    ],
+    new OAuthTestStorage(),
+    new Logger('oauth-test-options', [new NullHandler()]),
+);
+$providerOptionsAdapter = $providerOptionsOAuth->getAdapter('Google');
+$managerHttpClient = (new ReflectionProperty(OAuth::class, 'httpClient'))->getValue($providerOptionsOAuth);
+
+if ($providerOptionsAdapter->getHttpClient() === $managerHttpClient) {
+    throw new RuntimeException('Provider HTTP options must create a dedicated configured client.');
+}
+
+$injectedHttpClient = new OAuthTestHttpClient(new HttpResponse(503, [], 'upstream unavailable'));
+$injectedAdapter = new Triangle\OAuth\Provider\Google(
+    [
+        'callback' => 'https://app.example.test/oauth/callback',
+        'keys' => ['id' => 'test-client', 'secret' => 'test-secret'],
+        'http_client_options' => ['timeout' => 5],
+    ],
+    $injectedHttpClient,
+    new OAuthTestStorage(),
+    new Logger('oauth-test-injected', [new NullHandler()]),
+);
+
+if ($injectedAdapter->getHttpClient() !== $injectedHttpClient) {
+    throw new RuntimeException('An explicitly injected HTTP client must take precedence over client options.');
+}
+
+echo "OAuth HTTP client configuration and injection passed.\n";
